@@ -1,0 +1,15 @@
+{
+  "extends": ["react-app", "prettier", "plugin:prettier/recommended"],
+  "rules": {
+    "import/no-anonymous-default-export": "off",
+    "prettier/prettier": [
+      "warn",
+      {
+        "singleQuote": true,
+        "arrowParens": "avoid"
+      }
+    ],
+    "quotes": ["error", "single"]
+  },
+  "ignorePatterns": ["node_modules/", "/node_modules", "node_modules/"]
+}
