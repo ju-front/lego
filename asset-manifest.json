@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/lego/static/css/main.f855e6bc.css",
+    "main.js": "/lego/static/js/main.89116afd.js",
+    "static/js/453.acf3ecb7.chunk.js": "/lego/static/js/453.acf3ecb7.chunk.js",
+    "static/media/logo.svg": "/lego/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/lego/index.html",
+    "main.f855e6bc.css.map": "/lego/static/css/main.f855e6bc.css.map",
+    "main.89116afd.js.map": "/lego/static/js/main.89116afd.js.map",
+    "453.acf3ecb7.chunk.js.map": "/lego/static/js/453.acf3ecb7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.89116afd.js"
+  ]
+}
