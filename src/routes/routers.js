@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from 'pages/Home';
-import SigninPage from 'pages/SigninPage';
-import ClassCreatePage from 'pages/ClassCreatePage';
-import AttendanceCheckPage from 'pages/AttendanceCheckPage';
-import DashboardPage from 'pages/DashboardPage';
-import AttendanceListPage from 'pages/AttendanceListPage';
+import { SigninPage } from 'pages/SigninPage';
+import { DashboardPage } from 'pages/DashboardPage';
+import { ClassCreatePage } from 'pages/ClassCreatePage';
+import { CheckPage } from 'pages/CheckPage';
+import { SheetPage } from 'pages/SheetPage';
 
 /*예시로 Teacher로 설정, 실제로는 사용자 정보를 기반으로 설정
  * user.role에 따라 Sidebar의 메뉴가 다르게 보여진다.
@@ -24,23 +24,23 @@ export const router = createBrowserRouter([
     children: [],
   },
   {
-    path: 'Attendance-List',
-    element: <AttendanceListPage role={userRole} />,
+    path: 'dashboard',
+    element: <DashboardPage role={userRole} />,
     children: [],
   },
   {
-    path: 'Class-Create',
+    path: 'class-create',
     element: <ClassCreatePage />,
     children: [],
   },
   {
-    path: 'Attendance-Check',
-    element: <AttendanceCheckPage role={userRole} />,
+    path: 'check',
+    element: <CheckPage role={userRole} />,
     children: [],
   },
   {
-    path: 'Dashboard',
-    element: <DashboardPage role={userRole} />,
+    path: 'sheet',
+    element: <SheetPage role={userRole} />,
     children: [],
   },
 ]);

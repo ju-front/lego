@@ -20,5 +20,3 @@ export const SigninPage = () => {
     </div>
   );
 };
-
-export default SigninPage;

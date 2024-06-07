@@ -1,44 +1,30 @@
 import React from 'react';
 import Sidebar from 'components/Sidebar';
 import HeaderNav from 'components/HeaderNav';
+import 'css/styles.css';
 
 /**
- * @returns {JSX.Element} 출석 대시보드 페이지
+ * @returns {JSX.Element} 출석 페이지 대시보드
  * @constructor
+ * 출석 체크를 하는 수업들의 목록을 보여주는 페이지
  */
 
-const DashboardPage = ({ role }) => {
-  /* 예시로 Teacher로 설정(설정은 router), 실제로는 사용자 정보를 기반으로 설정
-   * user.role에 따라 Sidebar의 메뉴가 다르게 보여진다.
-   * role은 Teacher, Student 두 가지로 구분한다.
-   *
-   * 출석 대시보드 페이지는 role에 따라 UI가 다르게 보여진다.
+export const DashboardPage = ({ role }) => {
+  /*
+   * 출석 페이지 대시보드는 어떤 role이든 공통 컴포넌트 UI가 통일된다.
    */
-
-  const title =
-    role === 'Teacher' ? '교수용 출석 대시보드' : '학생용 출석 대시보드';
+  const title = '출석 페이지 대시보드';
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div className="main-layout">
       <Sidebar role={role} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="main-content-container">
         <HeaderNav title={title} />
-        <div style={{ flex: 1, backgroundColor: 'pink' }}>
-          {role === 'Teacher' ? (
-            <div>
-              <h1>교수용 출석 대시보드</h1>
-              {/* 교수용 대시보드 관련 콘텐츠 */}
-            </div>
-          ) : (
-            <div>
-              <h1>학생용 출석 대시보드</h1>
-              {/* 학생용 대시보드 관련 콘텐츠 */}
-            </div>
-          )}
+        <div className="main-content" style={{ backgroundColor: 'brown' }}>
+          <h1>출석 페이지 대시보드</h1>
+          {/* 출석 페이지 대시보드 관련 콘텐츠 */}
         </div>
       </div>
     </div>
   );
 };
-
-export default DashboardPage;
