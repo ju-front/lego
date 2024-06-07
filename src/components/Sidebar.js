@@ -30,6 +30,9 @@ const Sidebar = ({ role }) => {
           <Link to={'/'}>Home</Link>
         </li>
         <li>
+          <Link to={'/Attendance-List'}>대시보드</Link>
+        </li>
+        <li>
           <Link to={'/Class-Create'}>새로운 수업 생성</Link>
         </li>
         <li>
@@ -47,6 +50,9 @@ const Sidebar = ({ role }) => {
       <ul>
         <li>
           <Link to={'/'}>Home</Link>
+        </li>
+        <li>
+          <Link to={'/Attendance-List'}>대시보드</Link>
         </li>
         <li>
           <Link to={'/Attendance-Check'}>학생용 출석 체크 페이지</Link>
