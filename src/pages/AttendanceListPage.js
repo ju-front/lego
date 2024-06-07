@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from 'components/Sidebar';
 import HeaderNav from 'components/HeaderNav';
+import 'css/styles.css';
 
 /**
  * @returns {JSX.Element} 출석 페이지 대시보드
@@ -15,11 +16,11 @@ const AttendanceListPage = ({ role }) => {
   const title = '출석 페이지 대시보드';
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div className="main-layout">
       <Sidebar role={role} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="main-content-container">
         <HeaderNav title={title} />
-        <div style={{ flex: 1, backgroundColor: 'brown' }}>
+        <div className="main-content" style={{ backgroundColor: 'brown' }}>
           <h1>출석 페이지 대시보드</h1>
           {/* 출석 페이지 대시보드 관련 콘텐츠 */}
         </div>

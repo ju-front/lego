@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from 'components/Sidebar';
 import HeaderNav from 'components/HeaderNav';
+import 'css/styles.css';
 
 /**
  * @returns {JSX.Element} 출석 체크 페이지
@@ -18,11 +19,11 @@ const AttendanceCheckPage = ({ role }) => {
     role === 'Teacher' ? '교수용 출석 체크 페이지' : '학생용 출석 체크 페이지';
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div className="main-layout">
       <Sidebar role={role} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="main-content-container">
         <HeaderNav title={title} />
-        <div style={{ flex: 1, backgroundColor: 'green' }}>
+        <div className="main-content" style={{ backgroundColor: 'green' }}>
           {role === 'Teacher' ? (
             <div>
               <h1>교수용 출석 체크 페이지</h1>
