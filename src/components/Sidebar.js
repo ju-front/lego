@@ -30,16 +30,16 @@ const Sidebar = ({ role }) => {
           <Link to={'/'}>Home</Link>
         </li>
         <li>
-          <Link to={'/Attendance-List'}>대시보드</Link>
+          <Link to={'/dashboard'}>대시보드</Link>
         </li>
         <li>
-          <Link to={'/Class-Create'}>새로운 수업 생성</Link>
+          <Link to={'/class-create'}>새로운 수업 생성</Link>
         </li>
         <li>
-          <Link to={'/Attendance-Check'}>교수용 출석 체크 페이지</Link>
+          <Link to={'/check'}>교수용 출석 체크 페이지</Link>
         </li>
         <li>
-          <Link to={'/Dashboard'}>교수용 출석 대시보드</Link>
+          <Link to={'/sheet'}>교수용 출석 대시보드</Link>
         </li>
       </ul>
     </nav>
@@ -52,13 +52,13 @@ const Sidebar = ({ role }) => {
           <Link to={'/'}>Home</Link>
         </li>
         <li>
-          <Link to={'/Attendance-List'}>대시보드</Link>
+          <Link to={'/dashboard'}>대시보드</Link>
         </li>
         <li>
-          <Link to={'/Attendance-Check'}>학생용 출석 체크 페이지</Link>
+          <Link to={'/check'}>학생용 출석 체크 페이지</Link>
         </li>
         <li>
-          <Link to={'/Dashboard'}>학생용 출석 대시보드</Link>
+          <Link to={'/sheet'}>학생용 출석 대시보드</Link>
         </li>
       </ul>
     </nav>
