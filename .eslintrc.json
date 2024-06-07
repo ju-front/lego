@@ -6,10 +6,7 @@
       "warn",
       {
         "singleQuote": true,
-        "arrowParens": "avoid"
-      },
-      "error",
-      {
+        "arrowParens": "avoid",
         "endOfLine": "auto"
       }
     ],
