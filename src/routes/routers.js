@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from 'pages/Home';
+import SigninPage from 'pages/SigninPage';
 import ClassCreatePage from 'pages/ClassCreatePage';
 import AttendanceCheckPage from 'pages/AttendanceCheckPage';
 import DashboardPage from 'pages/DashboardPage';
@@ -15,6 +16,11 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />,
+    children: [],
+  },
+  {
+    path: 'Signin',
+    element: <SigninPage />,
     children: [],
   },
   {

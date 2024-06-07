@@ -13,6 +13,10 @@ export const Home = () => {
       <Link className="App-link" to={'Class-Create'}>
         임시경로 - 출석체크 방 생성 페이지
       </Link>
+      <br />
+      <Link className="App-link" to={'Signin'}>
+        임시경로 - 로그인 페이지
+      </Link>
     </div>
   );
 };

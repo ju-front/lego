@@ -1,0 +1,38 @@
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.custom-signin {
+  padding: 40px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.custom-signin input {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.custom-signin .btn-confirm {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2em;
+}
+
+.custom-signin .btn-confirm.inactive {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
