@@ -1,0 +1,15 @@
+/* 상단 네비게이션 컴포넌트 디자인 */
+#headerNav {
+  width: 100%;
+  background-color: #f1f8ff;
+  border-bottom: solid 1px #e3e3e3;
+  display: flex;
+  align-items: center;
+  height: 70px;
+  padding: 0 1rem;
+}
+
+#headerNav h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}

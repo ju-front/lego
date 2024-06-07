@@ -7,6 +7,10 @@
       {
         "singleQuote": true,
         "arrowParens": "avoid"
+      },
+      "error",
+      {
+        "endOfLine": "auto"
       }
     ],
     "quotes": ["error", "single"]
