@@ -6,7 +6,6 @@ import { Timer } from 'components/Timer';
 import { Desk } from 'components/Desk';
 import 'css/styles.css';
 import 'css/Timer.css';
-import { set } from 'ramda';
 
 /**
  * @returns {JSX.Element} 출석 체크 페이지
