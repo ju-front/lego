@@ -6,6 +6,7 @@ import { Timer } from 'components/Timer';
 import { Desk } from 'components/Desk';
 import 'css/styles.css';
 import 'css/Timer.css';
+import { set } from 'ramda';
 
 /**
  * @returns {JSX.Element} 출석 체크 페이지
@@ -24,22 +25,26 @@ export const CheckPage = ({ role }) => {
 
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [initialTime, setInitialTime] = useState(5 * 60); // 5분을 초 단위로 변환. 나중에 서버와 통신 필요
+  const [isAttendanceStarted, setIsAttendanceStarted] = useState(false);
 
   const handleStartClick = () => {
     setIsTimerRunning(true);
+    setIsAttendanceStarted(true); // 출석 시작 상태 변경
   };
 
   const handleStopClick = () => {
     setIsTimerRunning(false);
     setInitialTime(5 * 60); // 타이머 초기화
+    setIsAttendanceStarted(false); // 출석 종료 상태 변경
   };
 
   const handleTimerComplete = () => {
     setIsTimerRunning(false);
+    setIsAttendanceStarted(false); // 출석 종료 상태 변경
   };
 
   // 책상 배치 row, column 설정
-  const row = 2;
+  const row = 4;
   const column = 6;
 
   return (
@@ -60,11 +65,15 @@ export const CheckPage = ({ role }) => {
                   />
                 </div>
               </div>
-              <Desk row={row} column={column}></Desk>
+              <Desk
+                row={row}
+                column={column}
+                isAttendanceActive={isAttendanceStarted}
+              ></Desk>
               <div className="attendance-buttons">
                 <Button
                   label="출석 시작"
-                  color="#87ceeb"
+                  color={isAttendanceStarted ? '#d3d3d3' : '#87ceeb'}
                   onClick={handleStartClick}
                 />
                 <Button
