@@ -22,30 +22,18 @@ export const DashboardPage = ({ role }) => {
       <Sidebar role={role} />
       <div className="main-content-container">
         <HeaderNav title={title} />
-        <div style={{ flex: 1, backgroundColor: 'brown' }}>
+        <div className="main-content" style={{ backgroundColor: 'brown' }}>
           {role === 'Teacher' ? (
             <div>
               <h1>교수용 대시보드</h1>
               <div className="card-container">
-                <Card
-                  title="SPA개발방법론"
-                  color="skyblue"
-                  path="/Attendance-Check"
-                />
-                <Card
-                  title="통계학 및 실습"
-                  color="lightgreen"
-                  path="/Attendance-Check"
-                />
-                <Card
-                  title="머신러닝"
-                  color="lightcoral"
-                  path="/Attendance-Check"
-                />
+                <Card title="SPA개발방법론" color="skyblue" path="/check" />
+                <Card title="통계학 및 실습" color="lightgreen" path="/check" />
+                <Card title="머신러닝" color="lightcoral" path="/check" />
               </div>
               <PathButton
                 label="+"
-                path="/Class-Create"
+                path="/class-create"
                 color="#6DAEDD"
                 className="add-button"
               />
@@ -55,21 +43,9 @@ export const DashboardPage = ({ role }) => {
             <div>
               <h1>학생용 대시보드</h1>
               <div className="card-container">
-                <Card
-                  title="SPA개발방법론"
-                  color="skyblue"
-                  path="/Attendance-Check"
-                />
-                <Card
-                  title="통계학 및 실습"
-                  color="lightgreen"
-                  path="/Attendance-Check"
-                />
-                <Card
-                  title="머신러닝"
-                  color="lightcoral"
-                  path="/Attendance-Check"
-                />
+                <Card title="SPA개발방법론" color="skyblue" path="/check" />
+                <Card title="통계학 및 실습" color="lightgreen" path="/check" />
+                <Card title="머신러닝" color="lightcoral" path="/check" />
               </div>
             </div>
           )}
