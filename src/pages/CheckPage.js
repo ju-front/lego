@@ -3,6 +3,7 @@ import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
 import { Button } from 'components/Button';
 import { Timer } from 'components/Timer';
+import { Desk } from 'components/Desk';
 import 'css/styles.css';
 import 'css/Timer.css';
 
@@ -55,6 +56,8 @@ export const CheckPage = ({ role }) => {
                   />
                 </div>
               </div>
+
+              <Desk row={2} column={6}></Desk>
 
               <div className="attendance-buttons">
                 <Button

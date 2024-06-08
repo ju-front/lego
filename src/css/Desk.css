@@ -1,0 +1,22 @@
+/* 책상 배치 스타일 */
+.desk-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: white;
+}
+
+.desk-row {
+  display: flex;
+  gap: 10px;
+}
+
+.desk-cell {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  background-color: #b1cde9;
+}
