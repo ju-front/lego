@@ -3,6 +3,7 @@ import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
 import { Button } from 'components/Button';
 import { Timer } from 'components/Timer';
+import { Desk } from 'components/Desk';
 import 'css/styles.css';
 import 'css/Timer.css';
 
@@ -37,6 +38,10 @@ export const CheckPage = ({ role }) => {
     setIsTimerRunning(false);
   };
 
+  // 책상 배치 row, column 설정
+  const row = 2;
+  const column = 6;
+
   return (
     <div className="main-layout">
       <Sidebar role={role} />
@@ -55,7 +60,7 @@ export const CheckPage = ({ role }) => {
                   />
                 </div>
               </div>
-
+              <Desk row={row} column={column}></Desk>
               <div className="attendance-buttons">
                 <Button
                   label="출석 시작"
@@ -73,6 +78,16 @@ export const CheckPage = ({ role }) => {
             <div>
               <h1>학생용 출석 체크 페이지</h1>
               {/* 학생용 출석 체크 관련 콘텐츠 */}
+              <div className="timer-wrapper">
+                <div className="timer-container">
+                  <Timer
+                    initialTime={initialTime}
+                    onComplete={handleTimerComplete}
+                    isRunning={isTimerRunning}
+                  />
+                </div>
+              </div>
+              <Desk row={row} column={column}></Desk>
             </div>
           )}
         </div>
