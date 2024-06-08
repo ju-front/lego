@@ -1,7 +1,10 @@
-import React from 'react';
-import Sidebar from 'components/Sidebar';
-import HeaderNav from 'components/HeaderNav';
+import React, { useState } from 'react';
+import { Sidebar } from 'components/Sidebar';
+import { HeaderNav } from 'components/HeaderNav';
+import { Button } from 'components/Button';
+import { Timer } from 'components/Timer';
 import 'css/styles.css';
+import 'css/Timer.css';
 
 /**
  * @returns {JSX.Element} 출석 체크 페이지
@@ -18,6 +21,22 @@ export const CheckPage = ({ role }) => {
   const title =
     role === 'Teacher' ? '교수용 출석 체크 페이지' : '학생용 출석 체크 페이지';
 
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [initialTime, setInitialTime] = useState(5 * 60); // 5분을 초 단위로 변환. 나중에 서버와 통신 필요
+
+  const handleStartClick = () => {
+    setIsTimerRunning(true);
+  };
+
+  const handleStopClick = () => {
+    setIsTimerRunning(false);
+    setInitialTime(5 * 60); // 타이머 초기화
+  };
+
+  const handleTimerComplete = () => {
+    setIsTimerRunning(false);
+  };
+
   return (
     <div className="main-layout">
       <Sidebar role={role} />
@@ -27,7 +46,28 @@ export const CheckPage = ({ role }) => {
           {role === 'Teacher' ? (
             <div>
               <h1>교수용 출석 체크 페이지</h1>
-              {/* 교수용 출석 체크 관련 콘텐츠 */}
+              <div className="timer-wrapper">
+                <div className="timer-container">
+                  <Timer
+                    initialTime={initialTime}
+                    onComplete={handleTimerComplete}
+                    isRunning={isTimerRunning}
+                  />
+                </div>
+              </div>
+
+              <div className="attendance-buttons">
+                <Button
+                  label="출석 시작"
+                  color="#87ceeb"
+                  onClick={handleStartClick}
+                />
+                <Button
+                  label="출석 종료"
+                  color="#ff6347"
+                  onClick={handleStopClick}
+                />
+              </div>
             </div>
           ) : (
             <div>
