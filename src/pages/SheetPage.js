@@ -1,6 +1,6 @@
 import React from 'react';
-import Sidebar from 'components/Sidebar';
-import HeaderNav from 'components/HeaderNav';
+import { Sidebar } from 'components/Sidebar';
+import { HeaderNav } from 'components/HeaderNav';
 import 'css/styles.css';
 
 /**
