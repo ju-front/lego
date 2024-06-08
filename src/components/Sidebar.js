@@ -33,9 +33,6 @@ const Sidebar = ({ role }) => {
           <Link to={'/dashboard'}>대시보드</Link>
         </li>
         <li>
-          <Link to={'/class-create'}>새로운 수업 생성</Link>
-        </li>
-        <li>
           <Link to={'/check'}>교수용 출석 체크 페이지</Link>
         </li>
         <li>
