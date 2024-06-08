@@ -1,0 +1,24 @@
+.timer-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.timer-container {
+    display: flex;
+    justify-content: flex;
+    align-items: center;
+    background-color: #e0f7fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    width: 100%; /* 부모 컨테이너의 20% 너비 */
+    max-width: 100px; /* 최대 너비 설정 */
+    height: 0.5rem; /* 높이 설정 */
+    min-height: 10px; /* 최소 높이 설정 */
+}
+  
+.timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+  
