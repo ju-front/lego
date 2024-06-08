@@ -22,7 +22,7 @@ import 'css/SideBarComponent.css';
  * - 출석 체크 페이지
  * - 출석 대시보드
  */
-const Sidebar = ({ role }) => {
+export const Sidebar = ({ role }) => {
   const professorLinks = (
     <nav>
       <ul>
@@ -70,5 +70,3 @@ const Sidebar = ({ role }) => {
     </div>
   );
 };
-
-export default Sidebar;
