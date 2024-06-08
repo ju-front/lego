@@ -14,7 +14,9 @@ export const Desk = ({ row, column, isAttendanceActive }) => {
   const [showAlertModal, setShowAlertModal] = useState(false); // 출석 시간 외 클릭 시 모달
   const [selectedDesk, setSelectedDesk] = useState(null);
   const [attendanceStatus, setAttendanceStatus] = useState(
-    Array(row).fill().map(() => Array(column).fill(false))
+    Array(row)
+      .fill()
+      .map(() => Array(column).fill(false)),
   );
 
   const deskGrid = Array(row)
