@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from './Modal';
+import { Button } from '../components/Button';
 import '../css/StatusModal.css';
 
 /**
@@ -42,12 +43,18 @@ export const StatusModal = ({
           <option value="지각">지각</option>
           <option value="결석">결석</option>
         </select>
-        <button className="status-modal-button" onClick={handleSave}>
-          저장
-        </button>
-        <button className="status-modal-button" onClick={onClose}>
-          취소
-        </button>
+        <Button
+          className="status-modal-button"
+          label="저장"
+          onClick={handleSave}
+          color="#007bff"
+        />
+        <Button
+          className="status-modal-button"
+          label="취소"
+          onClick={onClose}
+          color="#0072ff"
+        />
       </div>
     </Modal>
   );
