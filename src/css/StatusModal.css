@@ -1,0 +1,36 @@
+.status-modal-content {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  width: auto;
+}
+
+.status-modal-header {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.status-modal-select {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.status-modal-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.status-modal-button:hover {
+  background-color: #0056b3;
+}
