@@ -17,7 +17,7 @@ export const Button = ({ label, className, onClick, color }) => {
       className={`basic-button ${className}`}
       onClick={onClick}
       style={{
-        '--button-color': color,
+        backgroundColor: color,
         '--button-hover-color': hoverColor,
       }}
     >

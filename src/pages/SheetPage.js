@@ -1,6 +1,6 @@
 import React from 'react';
-import Sidebar from 'components/Sidebar';
-import HeaderNav from 'components/HeaderNav';
+import { Sidebar } from 'components/Sidebar';
+import { HeaderNav } from 'components/HeaderNav';
 import { AttendanceTable } from 'components/AttendanceTable';
 import { dummyAttendanceData } from 'db/data';
 import 'css/styles.css';

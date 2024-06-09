@@ -10,12 +10,10 @@ import 'css/HeaderNavComponent.css';
  * 상단바에는 현제 페이지의 제목이 나온다.
  * title은 페이지의 제목이다.
  */
-const HeaderNav = ({ title }) => {
+export const HeaderNav = ({ title }) => {
   return (
     <div id="headerNav">
       <h3>상단바 영역 - {title}</h3>
     </div>
   );
 };
-
-export default HeaderNav;

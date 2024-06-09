@@ -1,7 +1,11 @@
-import React from 'react';
-import Sidebar from 'components/Sidebar';
-import HeaderNav from 'components/HeaderNav';
+import React, { useState } from 'react';
+import { Sidebar } from 'components/Sidebar';
+import { HeaderNav } from 'components/HeaderNav';
+import { Button } from 'components/Button';
+import { Timer } from 'components/Timer';
+import { Desk } from 'components/Desk';
 import 'css/styles.css';
+import 'css/Timer.css';
 
 /**
  * @returns {JSX.Element} 출석 체크 페이지
@@ -18,6 +22,30 @@ export const CheckPage = ({ role }) => {
   const title =
     role === 'Teacher' ? '교수용 출석 체크 페이지' : '학생용 출석 체크 페이지';
 
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [initialTime, setInitialTime] = useState(5 * 60); // 5분을 초 단위로 변환. 나중에 서버와 통신 필요
+  const [isAttendanceStarted, setIsAttendanceStarted] = useState(false);
+
+  const handleStartClick = () => {
+    setIsTimerRunning(true);
+    setIsAttendanceStarted(true); // 출석 시작 상태 변경
+  };
+
+  const handleStopClick = () => {
+    setIsTimerRunning(false);
+    setInitialTime(5 * 60); // 타이머 초기화
+    setIsAttendanceStarted(false); // 출석 종료 상태 변경
+  };
+
+  const handleTimerComplete = () => {
+    setIsTimerRunning(false);
+    setIsAttendanceStarted(false); // 출석 종료 상태 변경
+  };
+
+  // 책상 배치 row, column 설정
+  const row = 4;
+  const column = 6;
+
   return (
     <div className="main-layout">
       <Sidebar role={role} />
@@ -27,12 +55,47 @@ export const CheckPage = ({ role }) => {
           {role === 'Teacher' ? (
             <div>
               <h1>교수용 출석 체크 페이지</h1>
-              {/* 교수용 출석 체크 관련 콘텐츠 */}
+              <div className="timer-wrapper">
+                <div className="timer-container">
+                  <Timer
+                    initialTime={initialTime}
+                    onComplete={handleTimerComplete}
+                    isRunning={isTimerRunning}
+                  />
+                </div>
+              </div>
+              <Desk
+                row={row}
+                column={column}
+                isAttendanceActive={isAttendanceStarted}
+              ></Desk>
+              <div className="attendance-buttons">
+                <Button
+                  label="출석 시작"
+                  color={isAttendanceStarted ? '#d3d3d3' : '#87ceeb'}
+                  onClick={handleStartClick}
+                />
+                <Button
+                  label="출석 종료"
+                  color="#ff6347"
+                  onClick={handleStopClick}
+                />
+              </div>
             </div>
           ) : (
             <div>
               <h1>학생용 출석 체크 페이지</h1>
               {/* 학생용 출석 체크 관련 콘텐츠 */}
+              <div className="timer-wrapper">
+                <div className="timer-container">
+                  <Timer
+                    initialTime={initialTime}
+                    onComplete={handleTimerComplete}
+                    isRunning={isTimerRunning}
+                  />
+                </div>
+              </div>
+              <Desk row={row} column={column}></Desk>
             </div>
           )}
         </div>
