@@ -1,10 +1,9 @@
 import React from 'react';
 import Sidebar from 'components/Sidebar';
 import HeaderNav from 'components/HeaderNav';
-import { Table } from 'components/Table';
+import { AttendanceTable } from 'components/AttendanceTable';
+import { dummyAttendanceData } from 'db/data';
 import 'css/styles.css';
-
-import { users, classes, attendance } from 'db/data';
 
 /**
  * @returns {JSX.Element} 출석 대시보드 페이지
@@ -32,7 +31,7 @@ export const SheetPage = ({ role }) => {
             <div>
               <h1>교수용 출석 대시보드</h1>
               {/* 교수용 대시보드 관련 콘텐츠 */}
-              <Table users={users} classes={classes} attendance={attendance} />
+              <AttendanceTable attendance={dummyAttendanceData} />
             </div>
           ) : (
             <div>
