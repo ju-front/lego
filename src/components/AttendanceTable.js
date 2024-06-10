@@ -9,7 +9,7 @@ import { StatusModal } from './StatusModal';
  *
  * @param {Object[]} attendance - 출석 데이터의 배열:
  *   - {number} student_id - 학생의 고유 ID.
- *   - {string} date - 출석 날짜.
+ *   - {string} attendance_date - 출석 날짜.
  *   - {string} attendance_status - 학생의 출석 상태 ('출석', '지각', '결석' 중 하나).
  *
  * @returns {JSX.Element} - 출석 상태 변경 기능을 포함한 테이블과 상태 변경 모달을 반환.
@@ -21,41 +21,53 @@ export const AttendanceTable = ({ attendance }) => {
   const [selectedStatus, setSelectedStatus] = useState('');
 
   // StatusButton 클릭 이벤트 핸들러
-  const handleStatusClick = (student_id, date, status) => {
+  const handleStatusClick = (student_id, attendance_date, status) => {
     setSelectedStudentId(student_id);
-    setSelectedDate(date);
+    setSelectedDate(attendance_date);
     setSelectedStatus(status);
     setModalOpen(true);
   };
 
-  const saveStatus = (studentId, date, newStatus) => {
+  const saveStatus = (studentId, attendance_date, newStatus) => {
     console.log(
-      `Saving new status ${newStatus} for student ${studentId} on ${date}`,
+      `Saving new status ${newStatus} for student ${studentId} on ${attendance_date}`,
     );
     // API 호출 예정
   };
 
-  const dates = [...new Set(attendance.map(item => item.date))].sort();
+  // 날짜 데이터에서 시간 제거
+  const extractDateOnly = date => {
+    return new Date(date).toLocaleDateString();
+  };
+
+  const dates = [
+    ...new Set(attendance.map(item => extractDateOnly(item.attendance_date))),
+  ].sort();
+
   const columns = [
     { id: 'student_id', headerName: '학생 ID', field: 'student_id' },
-    ...dates.map(date => ({
-      id: date,
-      headerName: date,
-      field: date,
+    ...dates.map(attendance_date => ({
+      id: attendance_date,
+      headerName: attendance_date,
+      field: attendance_date,
       render: (status, row) => (
         <StatusButton
           status={status}
-          onClick={() => handleStatusClick(row.student_id, date, status)}
+          onClick={() =>
+            handleStatusClick(row.student_id, attendance_date, status)
+          }
         />
       ),
     })),
   ];
 
+  // 학생 ID별로 데이터 그룹화
   const studentsData = attendance.reduce((acc, item) => {
+    const dateOnly = extractDateOnly(item.attendance_date);
     acc[item.student_id] = acc[item.student_id] || {
       student_id: item.student_id,
     };
-    acc[item.student_id][item.date] = item.attendance_status;
+    acc[item.student_id][dateOnly] = item.attendance_status;
     return acc;
   }, {});
 
