@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
   },
   {
     path: 'dashboard',
-    element: <DashboardPage role={userRole} />,
+    element: <DashboardPage />,
     children: [],
   },
   {
@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
     children: [],
   },
   {
-    path: 'check',
+    path: 'check/:class_id',
     element: <CheckPage role={userRole} />,
     children: [],
   },

@@ -1,18 +1,21 @@
 /* 카드 컨테이너 스타일 */
 .card-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
+    justify-content: flex-start; /* 카드들을 위쪽으로 정렬 */
+    align-items: flex-start;
+    flex-wrap: wrap; /* 카드들이 줄을 넘을 경우 자동으로 줄 바꿈 */
+    gap: 1rem; /* 카드들 사이의 간격 */
+    margin-top: 1rem; /* 카드 컨테이너와 상단 콘텐츠 사이의 간격 */
+    width: 100%; /* 전체 너비 사용 */
 }
-
+  
 /* 개별 카드 스타일 */
 .card {
     border-radius: 0.5rem;
     overflow: hidden;
-    width: 20%;
+    width: calc(100% / 4 - 1rem); /* 4개의 카드를 한 줄에 배치 */
     height: 10rem;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-    margin: 1rem;
     background-color: var(--card-color);
     display: flex;
     flex-direction: column;

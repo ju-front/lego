@@ -27,10 +27,11 @@ html, body {
 .main-content {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
     height: 100%;
     flex: 1;
     overflow: auto; /* 메인 콘텐츠만 스크롤 가능하도록 설정 */
     padding: 1rem;
     position: relative;
 }
+
