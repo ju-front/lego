@@ -4,29 +4,29 @@ export const attendance_data = {
       attendance_id: 1,
       student_id: 101,
       student_name: 'Alice',
-      attendance_status: '출석', // "출석", "지각", "결석" 중 하나
-      attendance_date: '2024-06-10',
+      attendance_status: '출석',
+      attendance_date: '2024-06-01 08:00:00',
     },
     {
       attendance_id: 2,
       student_id: 102,
       student_name: 'Bob',
       attendance_status: '지각',
-      attendance_date: '2024-06-10',
+      attendance_date: '2024-06-01 08:15:00',
     },
     {
       attendance_id: 3,
       student_id: 101,
       student_name: 'Alice',
-      attendance_status: '출석', // "출석", "지각", "결석" 중 하나
-      attendance_date: '2024-06-11',
+      attendance_status: '출석',
+      attendance_date: '2024-06-02 08:00:00',
     },
     {
       attendance_id: 4,
       student_id: 102,
       student_name: 'Bob',
       attendance_status: '결석',
-      attendance_date: '2024-06-11',
+      attendance_date: '2024-06-02 08:00:00',
     },
   ],
 };

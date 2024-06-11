@@ -15,18 +15,11 @@ import '../css/StatusModal.css';
  * @param {string} props.date - 날짜
  * @returns {JSX.Element} 상태 변경 모달
  */
-export const StatusModal = ({
-  isOpen,
-  onClose,
-  onSave,
-  initialStatus,
-  studentId,
-  date,
-}) => {
+export const StatusModal = ({ isOpen, onClose, onSave, initialStatus }) => {
   const [status, setStatus] = useState(initialStatus);
 
   const handleSave = () => {
-    onSave(studentId, date, status);
+    onSave(status);
     onClose();
   };
 
