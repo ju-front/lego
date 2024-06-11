@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from './Table';
 import { StatusButton } from './StatusButton';
 import { StatusModal } from './StatusModal';
+import { attendance_data } from '../db/data';
 
-/**
- * 출석 데이터를 테이블 형태로 표시하고, 각 학생의 출석 상태를 수정할 수 있는 모달을 제공하는 컴포넌트입니다.
- * 각 날짜에 해당하는 출석 상태 버튼을 클릭하여 출석 상태를 변경할 수 있습니다.
- *
- * @param {Object[]} attendance - 출석 데이터의 배열:
- *   - {number} student_id - 학생의 고유 ID.
- *   - {string} attendance_date - 출석 날짜.
- *   - {string} attendance_status - 학생의 출석 상태 ('출석', '지각', '결석' 중 하나).
- *
- * @returns {JSX.Element} - 출석 상태 변경 기능을 포함한 테이블과 상태 변경 모달을 반환.
- */
-export const AttendanceTable = ({ attendance }) => {
+export const AttendanceTable = ({ classId }) => {
+  const [attendance, setAttendance] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('');
 
-  // StatusButton 클릭 이벤트 핸들러
+  useEffect(() => {
+    // const fetchAttendance = async () => {
+    //   const response = await fetch(`/api/classes/${classId}/attendance`, {
+    //     method: 'GET',
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    //     },
+    //   });
+    //   if (!response.ok) {
+    //     console.error('Failed to fetch attendance data');
+    //     return;
+    //   }
+    //   const data = await response.json();
+    //   setAttendance(data.attendance_records);
+    // };
+
+    // fetchAttendance();
+
+    // 임시 코드
+    const data = attendance_data;
+    setAttendance(data.attendance_records);
+  }, [classId]);
+
   const handleStatusClick = (student_id, attendance_date, status) => {
     setSelectedStudentId(student_id);
     setSelectedDate(attendance_date);
@@ -35,10 +48,7 @@ export const AttendanceTable = ({ attendance }) => {
     // API 호출 예정
   };
 
-  // 날짜 데이터에서 시간 제거
-  const extractDateOnly = date => {
-    return new Date(date).toLocaleDateString();
-  };
+  const extractDateOnly = date => new Date(date).toLocaleDateString();
 
   const dates = [
     ...new Set(attendance.map(item => extractDateOnly(item.attendance_date))),
@@ -61,11 +71,11 @@ export const AttendanceTable = ({ attendance }) => {
     })),
   ];
 
-  // 학생 ID별로 데이터 그룹화
   const studentsData = attendance.reduce((acc, item) => {
     const dateOnly = extractDateOnly(item.attendance_date);
     acc[item.student_id] = acc[item.student_id] || {
       student_id: item.student_id,
+      student_name: item.student_name,
     };
     acc[item.student_id][dateOnly] = item.attendance_status;
     return acc;
