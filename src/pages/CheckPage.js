@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
 import { Button } from 'components/Button';
@@ -22,9 +23,32 @@ export const CheckPage = ({ role }) => {
   const title =
     role === 'Teacher' ? '교수용 출석 체크 페이지' : '학생용 출석 체크 페이지';
 
+  const { class_id } = useParams();
+  const [classData, setClassData] = useState(null); // 수업 정보를 받아올 상태
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [initialTime, setInitialTime] = useState(5 * 60); // 5분을 초 단위로 변환. 나중에 서버와 통신 필요
   const [isAttendanceStarted, setIsAttendanceStarted] = useState(false);
+
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        const response = await fetch('/dummyData.json');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const classInfo = data.classes.find(
+          classItem => classItem.class_id === parseInt(class_id),
+        );
+        setClassData(classInfo);
+        setInitialTime(classInfo.late_time_limit * 60); // 출석 시간을 초 단위로 변환
+      } catch (error) {
+        console.error('Failed to load class data from dummy data', error);
+      }
+    };
+
+    fetchClassData();
+  }, [class_id]);
 
   const handleStartClick = () => {
     setIsTimerRunning(true);
@@ -33,7 +57,7 @@ export const CheckPage = ({ role }) => {
 
   const handleStopClick = () => {
     setIsTimerRunning(false);
-    setInitialTime(5 * 60); // 타이머 초기화
+    setInitialTime(classData.late_time_limit * 60); // 타이머 초기화
     setIsAttendanceStarted(false); // 출석 종료 상태 변경
   };
 
@@ -42,13 +66,20 @@ export const CheckPage = ({ role }) => {
     setIsAttendanceStarted(false); // 출석 종료 상태 변경
   };
 
-  // 책상 배치 row, column 설정
-  const row = 4;
-  const column = 6;
+  const links = [
+    { path: '/', label: 'Home' },
+    { path: '/dashboard', label: '대시보드' },
+    { path: '/check', label: '출석 체크 페이지' },
+    { path: '/sheet', label: '출결 현황' },
+  ];
+
+  if (!classData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="main-layout">
-      <Sidebar role={role} />
+      <Sidebar role={role} links={links} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'green' }}>
@@ -65,8 +96,8 @@ export const CheckPage = ({ role }) => {
                 </div>
               </div>
               <Desk
-                row={row}
-                column={column}
+                row={classData.desk_rows}
+                column={classData.desk_columns}
                 isAttendanceActive={isAttendanceStarted}
               ></Desk>
               <div className="attendance-buttons">
@@ -95,7 +126,10 @@ export const CheckPage = ({ role }) => {
                   />
                 </div>
               </div>
-              <Desk row={row} column={column}></Desk>
+              <Desk
+                row={classData.desk_rows}
+                column={classData.desk_columns}
+              ></Desk>
             </div>
           )}
         </div>
