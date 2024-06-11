@@ -12,10 +12,17 @@ export const SigninPage = () => {
     navigate('/Class-Create');
   };
 
+  const handleSignUpClick = () => {
+    navigate('/signup'); // 회원가입 페이지 경로로 이동
+  };
+
   return (
     <div className="page-container">
       <div className="custom-signin">
         <SigninEmail1 onConfirm={handleOnSubmit} />
+        <div className="signup-link" onClick={handleSignUpClick}>
+          Sign Up
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 .page-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -35,4 +36,12 @@
 .custom-signin .btn-confirm.inactive {
   background-color: #6c757d;
   cursor: not-allowed;
+}
+
+.custom-signin .signup-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1em;
+  color: #007bff;
+  cursor: pointer;
 }
