@@ -18,12 +18,19 @@ export const SheetPage = ({ role }) => {
    * 출석 대시보드 페이지는 role에 따라 UI가 다르게 보여진다.
    */
 
+  const links = [
+    { path: '/', label: 'Home' },
+    { path: '/dashboard', label: '대시보드' },
+    { path: '/check', label: '출석 체크 페이지' },
+    { path: '/sheet', label: '출결 현황' },
+  ];
+
   const title =
     role === 'Teacher' ? '교수용 출석 대시보드' : '학생용 출석 대시보드';
 
   return (
     <div className="main-layout">
-      <Sidebar role={role} />
+      <Sidebar role={role} links={links} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'pink' }}>

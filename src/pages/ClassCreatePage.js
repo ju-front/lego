@@ -25,7 +25,7 @@ export const ClassCreatePage = () => {
 
   return (
     <div className="main-layout">
-      <Sidebar role={user.role} />
+      <Sidebar role={user.role} links={[]} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'yellow' }}>

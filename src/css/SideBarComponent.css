@@ -6,7 +6,6 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  justify-content: space-between; /* 상단과 하단을 분리 */
 }
 
 #sidebar > * {
@@ -23,6 +22,7 @@
 #sidebar nav ul {
   list-style: none;
   padding: 0;
+  margin-top: auto; /* 프로필 아래에 여백 추가 */
 }
 
 #sidebar nav ul li {
@@ -51,6 +51,7 @@
 #logout {
   padding: 1rem 0;
   text-align: center;
+  margin-top: auto; /* 사이드바 하단에 고정 */
 }
 
 #logout button {
@@ -68,4 +69,31 @@
 #logout button:hover {
   background-color: #1e85f1;
   color: white;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.profile-circle {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: rgb(217, 217, 217);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e85f1;
+  margin-bottom: 0.5rem;
+}
+
+.profile-username {
+  color: white;
+  font-size: 1rem;
 }
