@@ -73,14 +73,14 @@ export const Desk = ({ row, column, isAttendanceActive }) => {
         ))}
       </div>
       {/* 모달 컴포넌트 */}
-      <Modal show={showConfirmModal} onClose={handleCloseModal}>
+      <Modal isOpen={showConfirmModal} onClose={handleCloseModal}>
         <p>해당 자리에 출석하시겠습니까?</p>
         <div className="modal-buttons">
           <button onClick={handleConfirmAttendance}>예</button>
           <button onClick={handleCloseModal}>아니오</button>
         </div>
       </Modal>
-      <Modal show={showAlertModal} onClose={handleCloseAlertModal}>
+      <Modal isOpen={showAlertModal} onClose={handleCloseAlertModal}>
         <p>현재 출석시간이 아닙니다.</p>
         <div className="modal-buttons">
           <button onClick={handleCloseAlertModal}>확인</button>
