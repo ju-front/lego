@@ -11,7 +11,7 @@ export const Home = () => {
       <h1>{helloWorld()}</h1>
       <br />
       <Link className="App-link" to={'dashboard'}>
-        임시경로 - 출석체크 방 생성 페이지
+        임시경로 - 대시보드
       </Link>
       <br />
       <Link className="App-link" to={'Signin'}>

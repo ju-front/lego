@@ -29,7 +29,7 @@ export const SheetPage = ({ role }) => {
 
   return (
     <div className="main-layout">
-      <Sidebar role={role} links={links} />
+      <Sidebar links={links} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'pink' }}>

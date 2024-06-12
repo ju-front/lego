@@ -82,7 +82,7 @@ export const DashboardPage = () => {
 
   return (
     <div className="main-layout">
-      <Sidebar role={userData.role} links={[]} />
+      <Sidebar links={[]} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'brown' }}>
