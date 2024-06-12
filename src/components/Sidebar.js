@@ -72,6 +72,7 @@ export const Sidebar = ({ links, classId }) => {
         <div className="profile">
           <div className="profile-circle">{userData.name.charAt(0)}</div>
           <div className="profile-username">{userData.name}</div>
+          <div className="profile-role">{userData.role}</div>
         </div>
       )}
       {links && (
