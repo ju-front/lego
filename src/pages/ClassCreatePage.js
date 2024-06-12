@@ -8,9 +8,6 @@ import { Option, Select } from 'components/OptionSelect';
 import 'css/styles.css';
 
 export const ClassCreatePage = () => {
-  const user = {
-    role: 'Teacher',
-  };
   /* 예시로 Teacher로 설정, 실제로는 사용자 정보를 기반으로 설정
    * role은 Teacher, Student 두 가지로 구분한다.
    *
@@ -36,15 +33,13 @@ export const ClassCreatePage = () => {
   useEffect(() => {
     // JSON 데이터 로드
     fetch('/dummyData.json')
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         // role이 Student인 사용자만 필터링하여 students 상태에 저장
-        const studentUsers = data.user.filter(
-          (user) => user.role === 'Student'
-        );
+        const studentUsers = data.user.filter(user => user.role === 'Student');
         setStudents(studentUsers);
       })
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   const handleAddStudent = () => {
@@ -67,14 +62,14 @@ export const ClassCreatePage = () => {
                 수업 이름
                 <Input
                   value={className}
-                  onChange={(e) => setClassName(e.target.value)}
+                  onChange={e => setClassName(e.target.value)}
                 />
               </div>
               <div>
                 지각 처리 시간
                 <Select
                   value={lateTime}
-                  onChange={(e) => setLateTime(e.target.value)}
+                  onChange={e => setLateTime(e.target.value)}
                   className="custom-select"
                 >
                   <Option value="0" label="n분" />
@@ -88,7 +83,7 @@ export const ClassCreatePage = () => {
                 행, 열 토글
                 <Select
                   value={deskRows}
-                  onChange={(e) => setDeskRows(e.target.value)}
+                  onChange={e => setDeskRows(e.target.value)}
                   className="custom-select"
                 >
                   <Option value="" label="행" />
@@ -99,7 +94,7 @@ export const ClassCreatePage = () => {
                 </Select>
                 <Select
                   value={deskCols}
-                  onChange={(e) => setDeskCols(e.target.value)}
+                  onChange={e => setDeskCols(e.target.value)}
                   className="custom-select"
                 >
                   <Option value="" label="열" />
@@ -113,11 +108,11 @@ export const ClassCreatePage = () => {
                 학생 선택 토글
                 <Select
                   value={selectedStudent}
-                  onChange={(e) => setSelectedStudent(e.target.value)}
+                  onChange={e => setSelectedStudent(e.target.value)}
                   className="custom-select"
                 >
                   <Option value="" label="학생 선택" /> {/* 기본 옵션 추가 */}
-                  {students.map((student) => (
+                  {students.map(student => (
                     <Option
                       key={student.user_id}
                       value={student.username}

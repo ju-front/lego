@@ -38,7 +38,7 @@ export const CheckPage = ({ role }) => {
         }
         const data = await response.json();
         const classInfo = data.classes.find(
-          (classItem) => classItem.class_id === parseInt(class_id)
+          classItem => classItem.class_id === parseInt(class_id),
         );
         setClassData(classInfo);
         setInitialTime(classInfo.late_time_limit * 60); // 출석 시간을 초 단위로 변환
