@@ -9,31 +9,30 @@ export const SigninPage = () => {
   const navigate = useNavigate();
 
   const handleOnSubmit = async (email, password) => {
-    // 임시 코드
-    // navigate('/dashboard');
+    // 서버 연동 이전 임시 코드
+    navigate('/dashboard');
 
-    try {
-      const response = await fetch('http://localhost:8080/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: email, password: password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        const accessToken = response.headers.get('access');
-        localStorage.setItem('access_token', accessToken);
-        navigate('/dashboard');
-        console.log(data.message);
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      console.error('Login failed:', error.message);
-    }
+    // 서버 연동 완료 시 해당 주석 해제
+    // try {
+    //   const response = await fetch('http://localhost:8080/login', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ username: email, password: password }),
+    //   });
+    //   const data = await response.json();
+    //   if (response.ok) {
+    //     const accessToken = response.headers.get('access');
+    //     localStorage.setItem('access_token', accessToken);
+    //     navigate('/dashboard');
+    //     console.log(data.message);
+    //   } else {
+    //     throw new Error(data.message);
+    //   }
+    // } catch (error) {
+    //   console.error('Login failed:', error.message);
+    // }
   };
 
   return (
