@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
-import { Button } from 'components/Button';
+//import { Button } from 'components/Button';
 import { PathButton } from 'components/PathButton';
 import { Input } from 'components/Input';
 import { Option, Select } from 'components/OptionSelect';
@@ -11,8 +11,19 @@ export const ClassCreatePage = () => {
   const user = {
     role: 'Teacher',
   };
+  /* 예시로 Teacher로 설정, 실제로는 사용자 정보를 기반으로 설정
+   * role은 Teacher, Student 두 가지로 구분한다.
+   *
+   * 출석 체크 방 생성페이지는 교수(Teacher)만 접근 가능하다.
+   * -> role이 Teacher인 경우에만 접근 가능하도록 설정
+   * 따라서 Props를 받지 않고, 고정된 role로 설정한다.
+   */
 
   const title = '새로운 수업 생성';
+  const links = [
+    { path: '/', label: 'Home' },
+    { path: '/dashboard', label: '대시보드' },
+  ];
 
   const [className, setClassName] = useState('');
   const [lateTime, setLateTime] = useState('');
@@ -30,7 +41,7 @@ export const ClassCreatePage = () => {
 
   return (
     <div className="main-layout">
-      <Sidebar role={user.role} />
+      <Sidebar links={links} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <h1 style={{ backgroundColor: 'pink' }}>출석체크 방 생성 페이지</h1>
