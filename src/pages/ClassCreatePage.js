@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
 //import { Button } from 'components/Button';
@@ -31,6 +31,21 @@ export const ClassCreatePage = () => {
   const [deskCols, setDeskCols] = useState('');
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedStudentsList, setSelectedStudentsList] = useState([]);
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    // JSON 데이터 로드
+    fetch('/dummyData.json')
+      .then((response) => response.json())
+      .then((data) => {
+        // role이 Student인 사용자만 필터링하여 students 상태에 저장
+        const studentUsers = data.user.filter(
+          (user) => user.role === 'Student'
+        );
+        setStudents(studentUsers);
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
 
   const handleAddStudent = () => {
     if (selectedStudent && !selectedStudentsList.includes(selectedStudent)) {
@@ -101,11 +116,14 @@ export const ClassCreatePage = () => {
                   onChange={(e) => setSelectedStudent(e.target.value)}
                   className="custom-select"
                 >
-                  <Option value="" label="학생선택" />
-                  <Option value="김민수 깃 아이디" label="김민수" />
-                  <Option value="김동욱 깃 아이디" label="김동욱" />
-                  <Option value="박지선 깃 아이디" label="박지선" />
-                  <Option value="장욱 깃 아이디" label="장욱" />
+                  <Option value="" label="학생 선택" /> {/* 기본 옵션 추가 */}
+                  {students.map((student) => (
+                    <Option
+                      key={student.user_id}
+                      value={student.username}
+                      label={student.name}
+                    />
+                  ))}
                 </Select>
                 <button onClick={handleAddStudent}>추가</button>
               </div>
@@ -125,7 +143,6 @@ export const ClassCreatePage = () => {
                 path="/check"
                 color="#1E85F1"
                 className=""
-                onClick
               />
             </div>
           </div>
