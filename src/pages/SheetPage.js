@@ -2,7 +2,6 @@ import React from 'react';
 import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
 import { AttendanceTable } from 'components/AttendanceTable';
-import { dummyAttendanceData } from 'db/data';
 import 'css/styles.css';
 
 /**
@@ -38,7 +37,7 @@ export const SheetPage = ({ role }) => {
             <div>
               <h1>교수용 출석 대시보드</h1>
               {/* 교수용 대시보드 관련 콘텐츠 */}
-              <AttendanceTable attendance={dummyAttendanceData} />
+              <AttendanceTable classId={1} />
             </div>
           ) : (
             <div>
