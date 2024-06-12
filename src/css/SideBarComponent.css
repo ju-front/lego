@@ -1,4 +1,4 @@
-/* 사이드바 컴포넌트 디자인 */
+/* 사이드바 공통 스타일 */
 #sidebar {
   width: 15rem;
   background-color: #1e85f1;
@@ -23,6 +23,7 @@
 #sidebar nav ul {
   list-style: none;
   padding: 0;
+  margin-top: auto; /* 프로필 아래에 여백 추가 */
 }
 
 #sidebar nav ul li {
@@ -51,6 +52,7 @@
 #logout {
   padding: 1rem 0;
   text-align: center;
+  margin-top: auto; /* 사이드바 하단에 고정 */
 }
 
 #logout button {
@@ -68,4 +70,62 @@
 #logout button:hover {
   background-color: #1e85f1;
   color: white;
+}
+
+/* Active link 스타일 */
+.active {
+  background-color: #fff;
+  color: #1e85f1;
+  position: relative;
+  font-weight: bold;
+  margin-right: -3rem;
+  border-top-right-radius: 0; /* 오른쪽 부분 둥글게 하지 않음 */
+  border-bottom-right-radius: 0; /* 오른쪽 부분 둥글게 하지 않음 */
+}
+
+.active:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -1rem; /* 화면을 연결하는 효과 */
+  width: 1rem;
+  height: 100%;
+  background-color: #fff;
+}
+
+.active:hover {
+  background-color: #fff;
+  color: #1e85f1;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.profile-circle {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: rgb(217, 217, 217);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e85f1;
+  margin-bottom: 0.5rem;
+}
+
+.profile-username {
+  color: black;
+  font-size: 1.5rem;
+}
+
+.profile-role {
+  color: black;
+  font-size: 1rem;
 }
