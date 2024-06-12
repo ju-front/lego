@@ -1,4 +1,4 @@
-/* 사이드바 컴포넌트 디자인 */
+/* 사이드바 공통 스타일 */
 #sidebar {
   width: 15rem;
   background-color: #1e85f1;
@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  justify-content: space-between; /* 상단과 하단을 분리 */
 }
 
 #sidebar > * {
@@ -69,6 +70,32 @@
 #logout button:hover {
   background-color: #1e85f1;
   color: white;
+}
+
+/* Active link 스타일 */
+.active {
+  background-color: #fff;
+  color: #1e85f1;
+  position: relative;
+  font-weight: bold;
+  margin-right: -3rem;
+  border-top-right-radius: 0; /* 오른쪽 부분 둥글게 하지 않음 */
+  border-bottom-right-radius: 0; /* 오른쪽 부분 둥글게 하지 않음 */
+}
+
+.active:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -1rem; /* 화면을 연결하는 효과 */
+  width: 1rem;
+  height: 100%;
+  background-color: #fff;
+}
+
+.active:hover {
+  background-color: #fff;
+  color: #1e85f1;
 }
 
 .profile {
