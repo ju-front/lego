@@ -102,7 +102,7 @@ export const DashboardPage = () => {
               <Card
                 key={classItem.class_id}
                 title={classItem.class_name}
-                color="skyblue"
+                color={classItem.class_color}
                 path={`/check/${classItem.class_id}`}
               />
             ))}
