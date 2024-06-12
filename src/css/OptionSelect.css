@@ -1,0 +1,19 @@
+/* Select 컴포넌트 스타일 */
+
+.select-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.select-field {
+  padding: 8px 12px;
+  font-size: 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.select-field:focus {
+  border-color: #007bff;
+}

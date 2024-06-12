@@ -1,0 +1,24 @@
+/* Input 컴포넌트 스타일 */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.input-field {
+  padding: 8px 12px;
+  font-size: 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+}
