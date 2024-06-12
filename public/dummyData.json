@@ -36,7 +36,8 @@
         "user_ids": [1, 2],
         "desk_rows": 4,
         "desk_columns": 4,
-        "late_time_limit": 5
+        "late_time_limit": 5,
+        "class_color": "#FF00AA"        
       },
       {
         "class_id": 2,
@@ -44,7 +45,8 @@
         "user_ids": [1],
         "desk_rows": 4,
         "desk_columns": 6,
-        "late_time_limit": 10
+        "late_time_limit": 10,
+        "class_color": "#AAFF00"
       },
       {
         "class_id": 3,
@@ -52,7 +54,8 @@
         "user_ids": [1, 2],
         "desk_rows": 2,
         "desk_columns": 7,
-        "late_time_limit": 3
+        "late_time_limit": 3,
+        "class_color": "#00AAFF"
       },
       {
         "class_id": 4,
@@ -60,7 +63,8 @@
         "user_ids": [2],
         "desk_rows": 3,
         "desk_columns": 4,
-        "late_time_limit": 5
+        "late_time_limit": 5,
+        "class_color": "#FFFFAA"
       }
     ],
     "attendance": [
