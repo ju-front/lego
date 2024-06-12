@@ -45,36 +45,11 @@ export const AttendanceTable = ({ classId }) => {
     setModalOpen(true);
   };
 
-  // 더미 데이터 fetch
   const saveStatus = async newStatus => {
     console.log(
       `${selectedRecord.attendanceId} attendance status updated to ${newStatus} successfully`,
     );
-
-    try {
-      const response = await fetch('/dummyAttendance.json');
-      const data = await response.json();
-
-      if (response.ok) {
-        const updatedAttendance = data.attendanceRecords.map(student => ({
-          ...student,
-          attendanceRecords: student.attendanceRecords.map(record => {
-            if (record.attendanceId === selectedRecord.attendanceId) {
-              return { ...record, attendanceStatus: newStatus }; // Update status
-            }
-            return record;
-          }),
-        }));
-
-        setAttendance(updatedAttendance);
-        console.log('Attendance status updated successfully');
-        setModalOpen(false);
-      } else {
-        throw new Error('Failed to fetch the dummy data');
-      }
-    } catch (error) {
-      console.error('Error simulating attendance status update:', error);
-    }
+    setModalOpen(false);
   };
 
   // 실제 데이터 fetch 코드
