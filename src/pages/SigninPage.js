@@ -9,7 +9,7 @@ export const SigninPage = () => {
 
   const handleOnSubmit = (email, password) => {
     console.log(email, password);
-    navigate('/Class-Create');
+    navigate('/dashboard');
   };
 
   return (
