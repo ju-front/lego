@@ -79,7 +79,7 @@ export const CheckPage = ({ role }) => {
 
   return (
     <div className="main-layout">
-      <Sidebar links={links} />
+      <Sidebar links={links} classId={class_id} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'green' }}>

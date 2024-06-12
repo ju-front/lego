@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
     children: [],
   },
   {
-    path: 'sheet',
+    path: 'sheet/:class_id',
     element: <SheetPage role={userRole} />,
     children: [],
   },

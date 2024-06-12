@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import 'css/SideBarComponent.css';
 
 /**
@@ -19,8 +19,9 @@ import 'css/SideBarComponent.css';
  * - 출석 체크 페이지
  * - 출결 현황
  */
-export const Sidebar = ({ role, links }) => {
+export const Sidebar = ({ links, classId }) => {
   const [userData, setUserData] = useState(null);
+  const location = useLocation();
   const userId = 1; // 예시로 1로 설정
 
   useEffect(() => {
@@ -78,7 +79,20 @@ export const Sidebar = ({ role, links }) => {
           <ul>
             {links.map((link, index) => (
               <li key={index}>
-                <Link to={link.path}>{link.label}</Link>
+                <Link
+                  to={
+                    link.path.includes('/check') || link.path.includes('/sheet')
+                      ? `${link.path}/${classId}`
+                      : link.path
+                  }
+                  className={
+                    location.pathname.includes(link.path) && link.path !== '/'
+                      ? 'active'
+                      : ''
+                  }
+                >
+                  {link.label}
+                </Link>
               </li>
             ))}
           </ul>

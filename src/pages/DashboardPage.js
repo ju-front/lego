@@ -20,6 +20,11 @@ export const DashboardPage = () => {
   const [userData, setUserData] = useState({}); // 사용자 정보를 받아올 상태
   const userId = 1; // 사용자 id
 
+  const links = [
+    { path: '/', label: 'Home' },
+    { path: '/dashboard', label: '대시보드' },
+  ];
+
   // 사용자 정보 가져오기
   useEffect(() => {
     const fetchUserData = async () => {
@@ -82,7 +87,7 @@ export const DashboardPage = () => {
 
   return (
     <div className="main-layout">
-      <Sidebar links={[]} />
+      <Sidebar links={links} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'brown' }}>

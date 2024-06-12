@@ -18,10 +18,14 @@ export const ClassCreatePage = () => {
    */
 
   const title = '새로운 수업 생성';
+  const links = [
+    { path: '/', label: 'Home' },
+    { path: '/dashboard', label: '대시보드' },
+  ];
 
   return (
     <div className="main-layout">
-      <Sidebar links={[]} />
+      <Sidebar links={links} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'yellow' }}>

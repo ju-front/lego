@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
 import { AttendanceTable } from 'components/AttendanceTable';
@@ -16,7 +17,7 @@ export const SheetPage = ({ role }) => {
    *
    * 출석 대시보드 페이지는 role에 따라 UI가 다르게 보여진다.
    */
-
+  const { class_id } = useParams();
   const links = [
     { path: '/', label: 'Home' },
     { path: '/dashboard', label: '대시보드' },
@@ -29,7 +30,7 @@ export const SheetPage = ({ role }) => {
 
   return (
     <div className="main-layout">
-      <Sidebar links={links} />
+      <Sidebar links={links} classId={class_id} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'pink' }}>
