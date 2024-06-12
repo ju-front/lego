@@ -45,40 +45,68 @@ export const AttendanceTable = ({ classId }) => {
     setModalOpen(true);
   };
 
+  // 더미 데이터 fetch
   const saveStatus = async newStatus => {
     console.log(
       `${selectedRecord.attendanceId} attendance status updated to ${newStatus} successfully`,
     );
-    setModalOpen(false);
 
-    // const apiUrl = `/api/classes/${classId}/attendance`;
-    // const options = {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     access: `${localStorage.getItem('access_token')}`,
-    //   },
-    //   body: JSON.stringify({
-    //     attendanceId: selectedRecord.attendanceId,
-    //     attendanceStatus: newStatus,
-    //   }),
-    // };
+    try {
+      const response = await fetch('/dummyAttendance.json');
+      const data = await response.json();
 
-    // try {
-    //   const response = await fetch(apiUrl, options);
-    //   const data = await response.json();
+      if (response.ok) {
+        const updatedAttendance = data.attendanceRecords.map(student => ({
+          ...student,
+          attendanceRecords: student.attendanceRecords.map(record => {
+            if (record.attendanceId === selectedRecord.attendanceId) {
+              return { ...record, attendanceStatus: newStatus }; // Update status
+            }
+            return record;
+          }),
+        }));
 
-    //   if (response.ok) {
-    //     console.log(data.message);
-    //     setModalOpen(false);
-    //     await fetchAttendance();
-    //   } else {
-    //     throw new Error(data.message);
-    //   }
-    // } catch (error) {
-    //   console.error('Failed to update attendance status:', error.message);
-    // }
+        setAttendance(updatedAttendance);
+        console.log('Attendance status updated successfully');
+        setModalOpen(false);
+      } else {
+        throw new Error('Failed to fetch the dummy data');
+      }
+    } catch (error) {
+      console.error('Error simulating attendance status update:', error);
+    }
   };
+
+  // 실제 데이터 fetch 코드
+  // const saveStatus = async newStatus => {
+  //   const apiUrl = `/api/classes/${classId}/attendance`;
+  //   const options = {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       access: `${localStorage.getItem('access_token')}`,
+  //     },
+  //     body: JSON.stringify({
+  //       attendanceId: selectedRecord.attendanceId,
+  //       attendanceStatus: newStatus,
+  //     }),
+  //   };
+
+  //   try {
+  //     const response = await fetch(apiUrl, options);
+  //     const data = await response.json();
+
+  //     if (response.ok) {
+  //       console.log(data.message);
+  //       setModalOpen(false);
+  //       await fetchAttendance();
+  //     } else {
+  //       throw new Error(data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to update attendance status:', error.message);
+  //   }
+  // };
 
   const dates = [
     ...new Set(
