@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import 'css/SideBarComponent.css';
 
 /**
@@ -23,6 +23,7 @@ export const Sidebar = ({ links, classId }) => {
   const [userData, setUserData] = useState(null);
   const location = useLocation();
   const userId = 1; // 예시로 1로 설정
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,6 +67,11 @@ export const Sidebar = ({ links, classId }) => {
   //   fetchData();
   // }, [userId]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    navigate('/signin');
+  };
+
   return (
     <div id="sidebar">
       {userData && (
@@ -100,7 +106,7 @@ export const Sidebar = ({ links, classId }) => {
         </nav>
       )}
       <div id="logout">
-        <button onClick={() => alert('로그아웃 버튼 클릭됨')}>로그아웃</button>
+        <button onClick={handleLogout}>로그아웃</button>
       </div>
     </div>
   );

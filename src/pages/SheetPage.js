@@ -38,7 +38,7 @@ export const SheetPage = ({ role }) => {
             <div>
               <h1>교수용 출석 대시보드</h1>
               {/* 교수용 대시보드 관련 콘텐츠 */}
-              <AttendanceTable classId={1} />
+              <AttendanceTable classId={class_id} />
             </div>
           ) : (
             <div>
