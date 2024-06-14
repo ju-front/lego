@@ -1,0 +1,36 @@
+{
+  "attendanceRecords": [
+    {
+      "studentId": 101,
+      "studentName": "Alice",
+      "attendanceRecords": [
+        {
+          "attendanceId": 1,
+          "attendanceStatus": "출석",
+          "attendanceDate": "2024-06-10"
+        },
+        {
+          "attendanceId": 3,
+          "attendanceStatus": "출석",
+          "attendanceDate": "2024-06-11"
+        }
+      ]
+    },
+    {
+      "studentId": 102,
+      "studentName": "Bob",
+      "attendanceRecords": [
+        {
+          "attendanceId": 2,
+          "attendanceStatus": "지각",
+          "attendanceDate": "2024-06-10"
+        },
+        {
+          "attendanceId": 4,
+          "attendanceStatus": "결석",
+          "attendanceDate": "2024-06-11"
+        }
+      ]
+    }
+  ]
+}
