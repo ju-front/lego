@@ -8,36 +8,50 @@ import { StatusModal } from './StatusModal';
  * 날짜별로 각 학생의 출석 상태를 보여주며, 각 출석 상태는 상태 변경 가능한 버튼으로 표시됩니다.
  *
  * @param {number} classId - 표시할 클래스의 ID.
+ * @param {string} role - 사용자의 역할. '선생' 또는 '학생' 중 하나.
+ * @param {number} userId - 사용자의 ID.
  */
-export const AttendanceTable = ({ classId }) => {
+export const AttendanceTable = ({ classId, role, userId }) => {
   const [attendance, setAttendance] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState({});
 
-  const fetchAttendance = async () => {
-    const response = await fetch('/dummyAttendance.json');
-
-    // const response = await fetch(`/api/classes/${classId}/attendance`, {
-    //   method: 'GET',
-    //   headers: {
-    //     'access': `${localStorage.getItem('access_token')}`,
-    //   },
-    // });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error('Failed to fetch attendance data', data.message);
-      return;
-    }
-
-    setAttendance(data.attendanceRecords);
-    console.log(data.message);
-  };
-
   useEffect(() => {
+    const fetchAttendance = async () => {
+      try {
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          throw new Error('Access token not found');
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/api/classes/${classId}/attendance`,
+          {
+            method: 'GET',
+            headers: {
+              access: accessToken,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch attendance data');
+        }
+
+        const data = await response.json();
+        setAttendance(data.attendanceRecords);
+      } catch (error) {
+        console.error('Failed to load attendance data', error);
+      }
+    };
+
     fetchAttendance();
   }, [classId]);
+
+  // const filterRecords =
+  //   role === '선생'
+  //     ? attendance
+  //     : attendance.filter(record => record.studentId === userId);
 
   const handleStatusClick = record => {
     console.log('clicked record', record);

@@ -14,19 +14,12 @@ import 'css/Timer.css';
  */
 
 export const CheckPage = () => {
-  /* 예시로 Teacher로 설정(설정은 router), 실제로는 사용자 정보를 기반으로 설정
-   * user.role에 따라 Sidebar의 메뉴가 다르게 보여진다.
-   * role은 Teacher, Student 두 가지로 구분한다.
-   *
-   * 출석 체크 방 생성페이지는 role에 따라 UI가 다르게 보여진다.
-   */
   const title = '출석 체크 페이지';
   const { class_id } = useParams();
   const [classData, setClassData] = useState(null); // 수업 정보를 받아올 상태
   const [userData, setUserData] = useState(null); // 사용자 정보를 받아올 상태
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [initialTime, setInitialTime] = useState(5 * 60); // 5분을 초 단위로 변환. 나중에 서버와 통신 필요
   const [isAttendanceStarted, setIsAttendanceStarted] = useState(false);
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
 
   // 수업방 상세 조회
   useEffect(() => {
@@ -60,7 +53,6 @@ export const CheckPage = () => {
           deskRows: data.deskRows,
           deskColumns: data.deskColumns,
         });
-        setInitialTime(data.lateTimeLimit * 60);
       } catch (error) {
         console.error('Failed to load class data', error);
       }
@@ -99,27 +91,114 @@ export const CheckPage = () => {
     fetchUserData();
   }, []);
 
-  const handleStartClick = () => {
-    setIsTimerRunning(true);
-    setIsAttendanceStarted(true); // 출석 시작 상태 변경
+  // 자리 배치 정보 로드
+  useEffect(() => {
+    const fetchAttendanceRecords = async () => {
+      try {
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          throw new Error('Access token not found');
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/api/classes/${class_id}/attendance/student`,
+          {
+            method: 'GET',
+            headers: {
+              access: accessToken,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch desk data');
+        }
+
+        const data = await response.json();
+        setAttendanceRecords(data.attendanceRecords);
+        setIsAttendanceStarted(data.isAttendanceStarted);
+        console.log(data.attendanceRecords);
+      } catch (error) {
+        console.error('Failed to load desk data', error);
+      }
+    };
+
+    // 1초마다 서버에서 자리 배치도를 받아옴
+    fetchAttendanceRecords();
+    const intervalId = setInterval(fetchAttendanceRecords, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [class_id]);
+
+  // 출석 시작 버튼 눌렀을 때
+  const handleStartClick = async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await fetch(
+        `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            access: accessToken,
+          },
+          body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+      const data = await response.json();
+      console.log(data.message);
+
+      setIsAttendanceStarted(true); // 출석 시작 상태 변경
+    } catch (error) {
+      console.error('Failed to start attendance check', error);
+    }
   };
 
-  const handleStopClick = () => {
-    setIsTimerRunning(false);
-    setInitialTime(classData.late_time_limit * 60); // 타이머 초기화
-    setIsAttendanceStarted(false); // 출석 종료 상태 변경
-  };
+  const handleStop = async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
 
-  const handleTimerComplete = () => {
-    setIsTimerRunning(false);
-    setIsAttendanceStarted(false); // 출석 종료 상태 변경
+      const response = await fetch(
+        `http://localhost:8080/api/classes/${class_id}/attendance/stop`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            access: accessToken,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      const data = await response.json();
+      console.log(data.message);
+      setIsAttendanceStarted(false); // 출석 종료 상태 변경
+    } catch (error) {
+      console.error('Failed to stop attendance check', error);
+    }
   };
 
   const links = [
     { path: '/', label: 'Home' },
     { path: '/dashboard', label: '대시보드' },
-    { path: '/check', label: '출석 체크 페이지' },
-    { path: '/sheet', label: '출결 현황' },
+    { path: `/check/${class_id}`, label: '출석 체크 페이지' },
+    { path: `/sheet/${class_id}`, label: '출결 현황' },
   ];
 
   if (!classData || !userData) {
@@ -138,46 +217,55 @@ export const CheckPage = () => {
               <div className="timer-wrapper">
                 <div className="timer-container">
                   <Timer
-                    initialTime={initialTime}
-                    onComplete={handleTimerComplete}
-                    isRunning={isTimerRunning}
+                    initialTime={classData.lateTimeLimit * 60}
+                    onComplete={handleStop}
+                    classId={class_id}
+                    isAttendanceStarted={isAttendanceStarted}
                   />
                 </div>
               </div>
               <Desk
-                row={classData.desk_rows}
-                column={classData.desk_columns}
-                isAttendanceActive={isAttendanceStarted}
+                row={classData.deskRows}
+                column={classData.deskColumns}
+                isAttendanceStarted={isAttendanceStarted}
+                classId={class_id}
+                attendanceRecords={attendanceRecords}
               ></Desk>
               <div className="attendance-buttons">
-                <Button
-                  label="출석 시작"
-                  color={isAttendanceStarted ? '#d3d3d3' : '#87ceeb'}
-                  onClick={handleStartClick}
-                />
-                <Button
-                  label="출석 종료"
-                  color="#ff6347"
-                  onClick={handleStopClick}
-                />
+                {isAttendanceStarted ? (
+                  <Button
+                    label="출석 종료"
+                    color="#ff6347"
+                    onClick={handleStop}
+                  />
+                ) : (
+                  <Button
+                    label="출석 시작"
+                    color="#87ceeb"
+                    onClick={handleStartClick}
+                  />
+                )}
               </div>
             </div>
           ) : (
             <div>
               <h1>학생용 출석 체크 페이지</h1>
-              {/* 학생용 출석 체크 관련 콘텐츠 */}
               <div className="timer-wrapper">
                 <div className="timer-container">
                   <Timer
-                    initialTime={initialTime}
-                    onComplete={handleTimerComplete}
-                    isRunning={isTimerRunning}
+                    initialTime={classData.lateTimeLimit * 60}
+                    onComplete={handleStop}
+                    classId={class_id}
+                    isAttendanceStarted={isAttendanceStarted}
                   />
                 </div>
               </div>
               <Desk
-                row={classData.desk_rows}
-                column={classData.desk_columns}
+                row={classData.deskRows}
+                column={classData.deskColumns}
+                isAttendanceStarted={isAttendanceStarted}
+                classId={class_id}
+                attendanceRecords={attendanceRecords}
               ></Desk>
             </div>
           )}
