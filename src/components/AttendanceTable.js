@@ -40,6 +40,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
 
       const data = await response.json();
       setAttendance(data.attendanceRecords);
+      console.log(data.attendanceRecords);
     } catch (error) {
       console.error('Failed to load attendance data', error);
     }
@@ -91,10 +92,14 @@ export const AttendanceTable = ({ classId, role, userId }) => {
     }
   };
 
+  const extractDate = dateTimeStr => dateTimeStr.split('T')[0];
+
   const dates = [
     ...new Set(
       attendance.flatMap(student =>
-        student.attendanceRecords.map(record => record.attendanceDate),
+        student.attendanceRecords.map(record =>
+          extractDate(record.attendanceDate),
+        ),
       ),
     ),
   ].sort();
@@ -125,7 +130,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
     ...student.attendanceRecords.reduce(
       (acc, record) => ({
         ...acc,
-        [record.attendanceDate]: record,
+        [extractDate(record.attendanceDate)]: record,
       }),
       {},
     ),
