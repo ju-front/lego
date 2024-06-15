@@ -67,7 +67,7 @@ export const DashboardPage = () => {
         const response = await fetch('http://localhost:8080/api/classes', {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            access: accessToken,
           },
         });
 
@@ -76,19 +76,14 @@ export const DashboardPage = () => {
         }
 
         const data = await response.json();
-        const filteredClasses = data.classes.filter(classItem =>
-          classItem.user_ids.includes(userData.user_id),
-        );
-        setClasses(filteredClasses);
+        setClasses(data.classes);
       } catch (error) {
         console.error('Failed to load classes from API', error);
       }
     };
 
-    if (userData.user_id) {
-      fetchClasses();
-    }
-  }, [userData]);
+    fetchClasses();
+  }, [userData.user_id]);
 
   return (
     <div className="main-layout">
@@ -103,10 +98,10 @@ export const DashboardPage = () => {
           <div className="card-container">
             {classes.map(classItem => (
               <Card
-                key={classItem.class_id}
-                title={classItem.class_name}
-                color={classItem.class_color}
-                path={`/check/${classItem.class_id}`}
+                key={classItem.classId}
+                title={classItem.className}
+                color={classItem.classColor}
+                path={`/check/${classItem.classId}`}
               />
             ))}
           </div>

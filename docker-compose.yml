@@ -5,7 +5,7 @@ services:
     image: mysql:latest
     # Mysql 서버가 완전히 켜졌는지 확인하기 위함
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -13,8 +13,9 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: attendtifyDB
+      TZ: 'Asia/Seoul' # 시간대 설정
     ports:
-      - "3306:3306"
+      - '3306:3306'
     volumes:
       - ./my-custom.cnf:/etc/mysql/conf.d/my-custom.cnf
     networks:
@@ -22,17 +23,18 @@ services:
 
   spring-boot-app:
     # spring-boot-app build 파일 필요 시
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
+    #    build:
+    #      context: .
+    #      dockerfile: Dockerfile
     container_name: spaproject
-    image : ukjang/attentifyproject:latest
+    image: ukjang/attentifyproject:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/attendtifyDB?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: "root"
-      SPRING_DATASOURCE_PASSWORD: "1234"
+      SPRING_DATASOURCE_USERNAME: 'root'
+      SPRING_DATASOURCE_PASSWORD: '1234'
+      TZ: 'Asia/Seoul' # 시간대 설정
     ports:
-      - "8080:8080"
+      - '8080:8080'
     depends_on:
       mysql:
         # Mysql 서버가 완전히 켜졌을 시에 Springboot 서버 실행
