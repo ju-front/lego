@@ -7,7 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "ezy-fn": "github:ju-front/ezy-fn#main",
-    "ezy-ui": "file:../ezy-ui/ezy-ui-0.1.12.tgz",
+    "ezy-ui": "file:./ezy-ui-0.1.15.tgz",
     "gh-pages": "^6.1.1",
     "ramda": "^0.29.1",
     "react": "^18.2.0",

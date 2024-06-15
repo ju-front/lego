@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from './Table';
+// import { Table } from './Table';
+import { CommonTable } from 'ezy-ui';
 import { StatusButton } from './StatusButton';
 import { StatusModal } from './StatusModal';
 
@@ -106,41 +107,40 @@ export const AttendanceTable = ({ classId, role, userId }) => {
   ].sort();
 
   const columns = [
-    { id: 'studentId', headerName: '학생 ID', field: 'studentId' },
+    {
+      id: 'studentId',
+      headerName: '학생 ID',
+      field: 'studentId',
+      colType: 'TEXT',
+    },
     ...dates.map(date => ({
       id: date,
       headerName: date,
       field: date,
-      render: (item, row) => (
+      colType: 'CUSTOM',
+      render: (data, row) => (
         <StatusButton
-          status={item.attendanceStatus}
-          onClick={() => handleStatusClick(item)}
+          status={data.attendanceStatus}
+          onClick={() => handleStatusClick(data)}
         />
       ),
     })),
   ];
 
-  const studentsData = attendance.reduce((acc, student) => {
-    student.attendanceRecords.forEach(record => {
-      const date = record.attendanceDate;
-      acc[student.studentId] = acc[student.studentId] || {
-        ...student,
-        dates: {},
-      };
-      acc[student.studentId].dates[date] = record;
-    });
-    return acc;
-  }, {});
+  const tableData = attendance.map(student => ({
+    ...student,
+    ...student.attendanceRecords.reduce(
+      (acc, record) => ({
+        ...acc,
+        [record.attendanceDate]: record,
+      }),
+      {},
+    ),
+  }));
 
   return (
     <>
-      <Table
-        colDefs={columns}
-        data={Object.values(studentsData).map(student => ({
-          ...student,
-          ...student.dates,
-        }))}
-      />
+      <CommonTable colDefs={columns} data={tableData} />
       <StatusModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
