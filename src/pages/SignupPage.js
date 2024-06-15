@@ -15,41 +15,44 @@ export const SignupPage = () => {
    * @param {string} role - 사용자의 역할 ("선생" 또는 "학생")
    * @param {string} name - 사용자의 실제 이름
    */
-  const handleOnSubmit = async (email, password, role, name) => {
-    // 임시 코드
-    console.log('회원가입 성공', email, password);
-    navigate('/signin');
+  const handleOnSubmit = async (email, password, additionalData) => {
+    try {
+      const response = await fetch('http://localhost:8080/join', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+          role: additionalData.role,
+          name: additionalData.name,
+        }),
+      });
 
-    // const apiUrl = 'https://your-domain.com/join';
-    // const requestData = {
-    //   username: email,
-    //   password: password,
-    //   role: role,
-    //   name: name,
-    // };
+      const data = await response.json();
 
-    // const options = {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(requestData),
-    // };
+      if (response.ok) {
+        console.log(data.message);
+        navigate('/signin');
+        return;
+      }
 
-    // try {
-    //   const response = await fetch(apiUrl, options);
-    //   const data = await response.json();
-
-    //   if (!response.ok) {
-    //     console.error('Signup failed:', data.message);
-    //     throw new Error(data.message);
-    //   }
-
-    //   console.log(data.message);
-    //   navigate('/signin');
-    // } catch (error) {
-    //   console.error('Error processing request:', error);
-    // }
+      switch (response.status) {
+        case 409:
+          console.error('Signup failed:', data.message);
+          throw new Error('Username already exists');
+        case 422:
+          console.error('Signup failed:', data.message);
+          throw new Error('Invalid user data provided');
+        default:
+          console.error('Unexpected error:', data.message);
+          throw new Error('Unexpected error occurred during signup');
+      }
+    } catch (error) {
+      console.error('Signup failed:', error.message);
+      throw error;
+    }
   };
 
   /**
@@ -59,34 +62,44 @@ export const SignupPage = () => {
    * @returns {Promise<boolean>} 중복된 이메일인 경우 true, 그렇지 않은 경우 false를 반환
    */
   const handleOnCheck = async email => {
-    // 임시 코드
-    // return false;
-    return Promise.resolve(false);
+    try {
+      const response = await fetch(
+        'http://localhost:8080/join/check-username',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: email,
+          }),
+        },
+      );
 
-    // const apiUrl = 'https://your-domain.com/api/join/check-duplication'; // 실제 API 엔드포인트 URL로 변경 예정
-    // const options = {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ username: email }),
-    // };
-
-    // try {
-    //   const response = await fetch(apiUrl, options);
-    //   if (!response.ok) {
-    //     throw new Error('Network response was not ok');
-    //   }
-    //   const data = await response.json();
-    //   return data.isDuplicated;
-    // } catch (error) {
-    //   console.error('Error checking email duplication:', error);
-    //   throw error;
-    // }
+      const data = await response.json();
+      if (response.ok) {
+        return data.isDuplicated;
+      } else {
+        switch (response.status) {
+          case 400:
+            console.error('Error: ', data.message);
+            throw new Error('Username is required');
+          case 409:
+            console.error('Error: Username is already taken.');
+            return true;
+          default:
+            console.error('Unexpected error:', data.message);
+            throw new Error('Unexpected error occurred');
+        }
+      }
+    } catch (error) {
+      console.error('Error checking email duplication:', error.message);
+      throw error;
+    }
   };
 
   const validateName = name => {
-    if (name.length > 2) {
+    if (name.length >= 2) {
       return { isValid: true };
     } else {
       return { isValid: false, msg: '2자 이상 입력해주세요.' };
@@ -107,16 +120,16 @@ export const SignupPage = () => {
 
   const additionalFields = [
     {
-      name: 'name',
-      label: 'Name',
-      type: 'text',
-      validate: validateName,
-    },
-    {
       name: 'role',
       label: 'Role',
       type: 'text',
       validate: validateRole,
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      type: 'text',
+      validate: validateName,
     },
   ];
 
