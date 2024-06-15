@@ -145,7 +145,6 @@ export const ClassCreatePage = () => {
       });
 
       const data = await response.json();
-      console.log(data);
       if (response.status === 201) {
         navigate(`/check/${data.classId}`);
       } else {

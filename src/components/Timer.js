@@ -4,32 +4,62 @@ import React, { useState, useEffect } from 'react';
  * Timer 컴포넌트
  * @param {number} initialTime - 타이머의 초기 시간 (초 단위)
  * @param {function} onComplete - 타이머 종료 시 호출할 함수
- * @param {boolean} isRunning - 타이머 실행 여부
+ * @param {number} classId - 클래스 ID
+ * @param {boolean} isAttendanceStarted - 출석 시작 여부
  * @returns {JSX.Element} 타이머 컴포넌트
  */
-export const Timer = ({ initialTime, onComplete, isRunning }) => {
+export const Timer = ({
+  initialTime,
+  onComplete,
+  classId,
+  isAttendanceStarted,
+}) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
 
+  // 타이머 실행 시 호출할 함수
   useEffect(() => {
-    if (!isRunning) return;
+    let timerId;
 
-    if (timeLeft <= 0) {
-      onComplete();
-      return;
+    const fetchTimeLeft = async () => {
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) {
+        console.log('Access token not found');
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:8080/api/classes/${classId}/attendance/timer`,
+        {
+          method: 'GET',
+          headers: {
+            access: accessToken,
+          },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setTimeLeft(data.secondsRemaining);
+      } else {
+        console.log('Failed to fetch time left');
+      }
+    };
+
+    // 1초마다 서버에서 남은 시간을 받아옴
+    if (isAttendanceStarted) {
+      fetchTimeLeft();
+      timerId = setInterval(fetchTimeLeft, 1000);
     }
-
-    const timerId = setInterval(() => {
-      setTimeLeft(prevTime => prevTime - 1);
-    }, 1000);
 
     return () => clearInterval(timerId);
-  }, [timeLeft, isRunning, onComplete]);
+  }, [classId, isAttendanceStarted]);
 
+  // 타이머 종료 시 호출할 함수
   useEffect(() => {
-    if (!isRunning) {
-      setTimeLeft(initialTime);
+    if (timeLeft <= 0 && isAttendanceStarted) {
+      onComplete();
     }
-  }, [isRunning, initialTime]);
+  }, [timeLeft, onComplete, isAttendanceStarted]);
 
   const formatTime = time => {
     const minutes = String(Math.floor(time / 60)).padStart(2, '0');

@@ -13,6 +13,7 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: attendtifyDB
+      TZ: "Asia/Seoul"  # 시간대 설정
     ports:
       - "3306:3306"
     volumes:
@@ -31,6 +32,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/attendtifyDB?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "1234"
+      TZ: "Asia/Seoul"  # 시간대 설정
     ports:
       - "8080:8080"
     depends_on:
