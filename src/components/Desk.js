@@ -10,6 +10,7 @@ import { Modal } from './Modal';
  * @param {boolean} isAttendanceStarted - 출석 시작 여부
  * @param {array} attendanceRecords - 출석 기록
  * @param {number} classId - 클래스 ID
+ * @param {string} currentUser - 현재 사용자 이름
  * @returns {JSX.Element} 책상 컴포넌트
  */
 export const Desk = ({
@@ -18,6 +19,7 @@ export const Desk = ({
   isAttendanceStarted,
   attendanceRecords,
   classId,
+  currentUser,
 }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false); // 출석 확인 모달
   const [showAlertModal, setShowAlertModal] = useState(false); // 출석 시간 외 클릭 시 모달
@@ -25,18 +27,20 @@ export const Desk = ({
   const [attendanceStatus, setAttendanceStatus] = useState(
     Array(row)
       .fill()
-      .map(() => Array(column).fill(false)),
+      .map(() => Array(column).fill({ status: '', name: '' })),
   );
 
   // attendanceRecords를 기반으로 attendanceStatus 설정
   useEffect(() => {
     const updatedStatus = Array(row)
       .fill()
-      .map(() => Array(column).fill(false));
+      .map(() => Array(column).fill({ status: '', name: '' }));
 
     attendanceRecords.forEach(record => {
-      updatedStatus[record.deskRow][record.deskColumn] =
-        record.attendanceStatus;
+      updatedStatus[record.deskRow][record.deskColumn] = {
+        status: record.attendanceStatus,
+        name: record.studentName,
+      };
     });
 
     setAttendanceStatus(updatedStatus);
@@ -64,9 +68,12 @@ export const Desk = ({
     setShowAlertModal(false);
   }
 
-  function handleConfirmAttendance() {
+  async function handleConfirmAttendance() {
     const updatedStatus = [...attendanceStatus];
-    updatedStatus[selectedDesk.rowIndex][selectedDesk.columnIndex] = true;
+    updatedStatus[selectedDesk.rowIndex][selectedDesk.columnIndex] = {
+      status: '출석',
+      name: currentUser,
+    };
     setAttendanceStatus(updatedStatus);
     setShowConfirmModal(false);
     setSelectedDesk(null);
@@ -107,8 +114,21 @@ export const Desk = ({
       }
     };
 
-    sendAttendance();
+    await sendAttendance();
   }
+
+  const getColorByStatus = status => {
+    switch (status) {
+      case '출석':
+        return '#4caf50'; // Green
+      case '지각':
+        return '#ff9800'; // Orange
+      case '결석':
+        return '#f44336'; // Red
+      default:
+        return '#b1cde9'; // Default color
+    }
+  };
 
   return (
     <div className="desk-layout">
@@ -120,12 +140,14 @@ export const Desk = ({
               <div key={columnIndex}>
                 <Button
                   className="desk-cell"
-                  label={`${rowIndex + 1},${columnIndex + 1}`}
-                  color={
-                    attendanceStatus[rowIndex][columnIndex]
-                      ? '#4caf50'
-                      : '#b1cde9'
+                  label={
+                    attendanceStatus[rowIndex][columnIndex].name
+                      ? attendanceStatus[rowIndex][columnIndex].name
+                      : `${rowIndex + 1},${columnIndex + 1}`
                   }
+                  color={getColorByStatus(
+                    attendanceStatus[rowIndex][columnIndex].status,
+                  )}
                   onClick={() => handleCellClick(rowIndex, columnIndex)}
                 />
               </div>
