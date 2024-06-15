@@ -117,7 +117,6 @@ export const CheckPage = () => {
         const data = await response.json();
         setAttendanceRecords(data.attendanceRecords);
         setIsAttendanceStarted(data.isAttendanceStarted);
-        console.log(data.attendanceRecords);
       } catch (error) {
         console.error('Failed to load desk data', error);
       }
@@ -156,8 +155,7 @@ export const CheckPage = () => {
       }
       const data = await response.json();
       console.log(data.message);
-
-      setIsAttendanceStarted(true); // 출석 시작 상태 변경
+      setIsAttendanceStarted(true);
     } catch (error) {
       console.error('Failed to start attendance check', error);
     }
@@ -188,16 +186,21 @@ export const CheckPage = () => {
 
       const data = await response.json();
       console.log(data.message);
-      setIsAttendanceStarted(false); // 출석 종료 상태 변경
+      setIsAttendanceStarted(false);
     } catch (error) {
       console.error('Failed to stop attendance check', error);
     }
   };
 
+  const handleTimerComplete = () => {
+    setIsAttendanceStarted(false);
+    handleStop();
+  };
+
   const links = [
     { path: '/', label: 'Home' },
     { path: '/dashboard', label: '대시보드' },
-    { path: `/check/${class_id}`, label: '출석 체크 페이지' },
+    { path: '/check', label: '출석 체크 페이지' },
     { path: '/sheet', label: '출결 현황' },
   ];
 
@@ -218,9 +221,9 @@ export const CheckPage = () => {
                 <div className="timer-container">
                   <Timer
                     initialTime={classData.lateTimeLimit * 60}
-                    onComplete={handleStop}
-                    classId={class_id}
+                    onComplete={handleTimerComplete}
                     isAttendanceStarted={isAttendanceStarted}
+                    classId={class_id}
                   />
                 </div>
               </div>
@@ -230,6 +233,7 @@ export const CheckPage = () => {
                 isAttendanceStarted={isAttendanceStarted}
                 classId={class_id}
                 attendanceRecords={attendanceRecords}
+                currentUser={userData.name}
               ></Desk>
               <div className="attendance-buttons">
                 {isAttendanceStarted ? (
@@ -254,9 +258,9 @@ export const CheckPage = () => {
                 <div className="timer-container">
                   <Timer
                     initialTime={classData.lateTimeLimit * 60}
-                    onComplete={handleStop}
-                    classId={class_id}
+                    onComplete={handleTimerComplete}
                     isAttendanceStarted={isAttendanceStarted}
+                    classId={class_id}
                   />
                 </div>
               </div>
@@ -266,6 +270,7 @@ export const CheckPage = () => {
                 isAttendanceStarted={isAttendanceStarted}
                 classId={class_id}
                 attendanceRecords={attendanceRecords}
+                currentUser={userData.name}
               ></Desk>
             </div>
           )}

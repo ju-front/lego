@@ -10,6 +10,7 @@ import { Modal } from './Modal';
  * @param {boolean} isAttendanceStarted - 출석 시작 여부
  * @param {array} attendanceRecords - 출석 기록
  * @param {number} classId - 클래스 ID
+ * @param {string} currentUser - 현재 사용자 이름
  * @returns {JSX.Element} 책상 컴포넌트
  */
 export const Desk = ({
@@ -18,6 +19,7 @@ export const Desk = ({
   isAttendanceStarted,
   attendanceRecords,
   classId,
+  currentUser,
 }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false); // 출석 확인 모달
   const [showAlertModal, setShowAlertModal] = useState(false); // 출석 시간 외 클릭 시 모달
@@ -25,18 +27,17 @@ export const Desk = ({
   const [attendanceStatus, setAttendanceStatus] = useState(
     Array(row)
       .fill()
-      .map(() => Array(column).fill(false)),
+      .map(() => Array(column).fill(null)),
   );
 
   // attendanceRecords를 기반으로 attendanceStatus 설정
   useEffect(() => {
     const updatedStatus = Array(row)
       .fill()
-      .map(() => Array(column).fill(false));
+      .map(() => Array(column).fill(null));
 
     attendanceRecords.forEach(record => {
-      updatedStatus[record.deskRow][record.deskColumn] =
-        record.attendanceStatus;
+      updatedStatus[record.deskRow][record.deskColumn] = record.studentName;
     });
 
     setAttendanceStatus(updatedStatus);
@@ -66,7 +67,8 @@ export const Desk = ({
 
   function handleConfirmAttendance() {
     const updatedStatus = [...attendanceStatus];
-    updatedStatus[selectedDesk.rowIndex][selectedDesk.columnIndex] = true;
+    updatedStatus[selectedDesk.rowIndex][selectedDesk.columnIndex] =
+      currentUser;
     setAttendanceStatus(updatedStatus);
     setShowConfirmModal(false);
     setSelectedDesk(null);
@@ -79,10 +81,6 @@ export const Desk = ({
         return;
       }
 
-      // 한국 시간으로 변환
-      const now = new Date();
-      const koreaTime = new Date(now.getTime() + 9 * 60 * 60 * 1000); // 9시간 더하기
-
       const response = await fetch(
         `http://localhost:8080/api/classes/${classId}/attendance/student`,
         {
@@ -92,7 +90,9 @@ export const Desk = ({
             access: accessToken,
           },
           body: JSON.stringify({
-            attendanceDate: koreaTime.toISOString(),
+            attendanceDate: new Date(
+              new Date().getTime() + 9 * 60 * 60 * 1000,
+            ).toISOString(),
             deskRow: selectedDesk.rowIndex,
             deskColumn: selectedDesk.columnIndex,
             attendanceStatus: '출석',
@@ -120,7 +120,11 @@ export const Desk = ({
               <div key={columnIndex}>
                 <Button
                   className="desk-cell"
-                  label={`${rowIndex + 1},${columnIndex + 1}`}
+                  label={
+                    attendanceStatus[rowIndex][columnIndex]
+                      ? `${attendanceStatus[rowIndex][columnIndex]}`
+                      : `${rowIndex + 1},${columnIndex + 1}`
+                  }
                   color={
                     attendanceStatus[rowIndex][columnIndex]
                       ? '#4caf50'
