@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from 'pages/Home';
 import { SigninPage } from 'pages/SigninPage';
+import { SignupPage } from 'pages/SignupPage';
 import { DashboardPage } from 'pages/DashboardPage';
 import { ClassCreatePage } from 'pages/ClassCreatePage';
 import { CheckPage } from 'pages/CheckPage';
@@ -23,6 +24,12 @@ export const router = createBrowserRouter([
     element: <SigninPage />,
     children: [],
   },
+  {
+    path: 'signup',
+    element: <SignupPage />,
+    children: [],
+  },
+
   {
     path: 'dashboard',
     element: <DashboardPage />,
