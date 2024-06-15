@@ -18,84 +18,87 @@ export const DashboardPage = () => {
   const title = '출석 페이지 대시보드';
   const [classes, setClasses] = useState([]); // 수업 목록을 받아올 상태
   const [userData, setUserData] = useState({}); // 사용자 정보를 받아올 상태
-  const userId = 1; // 사용자 id
 
   const links = [
     { path: '/', label: 'Home' },
     { path: '/dashboard', label: '대시보드' },
   ];
 
-  // 사용자 정보 가져오기
+  // 서버와 연동
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('/dummyData.json');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          throw new Error('Access token not found');
         }
+
+        const response = await fetch('http://localhost:8080/api/user', {
+          method: 'GET',
+          headers: {
+            access: accessToken,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
         const data = await response.json();
-        const user = data.user.find(user => user.user_id === userId);
-        setUserData(user);
+        setUserData(data);
       } catch (error) {
-        console.error('Failed to load user data from dummy data', error);
+        console.error('Failed to load user data', error);
       }
     };
 
     fetchUserData();
-  }, [userId]);
+  }, []);
 
   // 수업 목록 가져오기
+  // 실제로는 서버에서 사용자의 수업 목록을 받아온다.
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch('/dummyData.json');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          throw new Error('No access token found');
         }
+
+        const response = await fetch('http://localhost:8080/api/classes', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch classes');
+        }
+
         const data = await response.json();
         const filteredClasses = data.classes.filter(classItem =>
-          classItem.user_ids.includes(userId),
+          classItem.user_ids.includes(userData.user_id),
         );
         setClasses(filteredClasses);
       } catch (error) {
-        console.error('Failed to load classes from dummy data', error);
+        console.error('Failed to load classes from API', error);
       }
     };
 
-    fetchClasses();
-  }, [userId]);
-  // 실제로는 서버에서 사용자의 수업 목록을 받아온다.
-  //     const response = await fetch('/api/classes', {
-  //       method: 'GET',
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       console.error('Failed to fetch classes', errorData.message);
-  //       return;
-  //     }
-
-  //     const data = await response.json();
-  //     setClasses(data.classes);
-  //   };
-
-  //   fetchClasses();
-  // }, [userId]);
+    if (userData.user_id) {
+      fetchClasses();
+    }
+  }, [userData]);
 
   return (
     <div className="main-layout">
-      <Sidebar links={links} />
+      <Sidebar links={links} userData={userData} />
       <div className="main-content-container">
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'brown' }}>
           {/* 대시보드 관련 콘텐츠 */}
           <h1>
-            {userData.role === 'Teacher'
-              ? '교수용 대시보드'
-              : '학생용 대시보드'}
+            {userData.role === '선생' ? '교수용 대시보드' : '학생용 대시보드'}
           </h1>
           <div className="card-container">
             {classes.map(classItem => (
@@ -107,7 +110,7 @@ export const DashboardPage = () => {
               />
             ))}
           </div>
-          {userData.role === 'Teacher' && (
+          {userData.role === '선생' && (
             <PathButton
               label="+"
               path="/class-create"
