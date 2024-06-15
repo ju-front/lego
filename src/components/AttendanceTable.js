@@ -53,7 +53,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
   // const filterRecords =
   //   role === '선생'
   //     ? attendance
-  //     : attendance.filter(record => record.studentId === userId);
+  //     : attendance.filter(record => record.studentName === userId);
 
   const handleStatusClick = record => {
     console.log('clicked record', record);
@@ -106,9 +106,9 @@ export const AttendanceTable = ({ classId, role, userId }) => {
 
   const columns = [
     {
-      id: 'studentId',
-      headerName: '학생 ID',
-      field: 'studentId',
+      id: 'studentName',
+      headerName: '학생 이름',
+      field: 'studentName',
       colType: 'TEXT',
     },
     ...dates.map(date => ({
@@ -144,7 +144,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
         onClose={() => setModalOpen(false)}
         onSave={newStatus => saveStatus(newStatus)}
         initialStatus={selectedRecord.attendanceStatus}
-        studentId={selectedRecord.studentId}
+        studentName={selectedRecord.studentName}
         date={selectedRecord.attendanceDate}
       />
     </>
