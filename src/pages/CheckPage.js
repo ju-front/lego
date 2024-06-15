@@ -198,7 +198,7 @@ export const CheckPage = () => {
     { path: '/', label: 'Home' },
     { path: '/dashboard', label: '대시보드' },
     { path: `/check/${class_id}`, label: '출석 체크 페이지' },
-    { path: `/sheet/${class_id}`, label: '출결 현황' },
+    { path: '/sheet', label: '출결 현황' },
   ];
 
   if (!classData || !userData) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // import { Table } from './Table';
 import { CommonTable } from 'ezy-ui';
 import { StatusButton } from './StatusButton';
@@ -17,37 +17,37 @@ export const AttendanceTable = ({ classId, role, userId }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState({});
 
-  useEffect(() => {
-    const fetchAttendance = async () => {
-      try {
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-          throw new Error('Access token not found');
-        }
-
-        const response = await fetch(
-          `http://localhost:8080/api/classes/${classId}/attendance`,
-          {
-            method: 'GET',
-            headers: {
-              access: accessToken,
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch attendance data');
-        }
-
-        const data = await response.json();
-        setAttendance(data.attendanceRecords);
-      } catch (error) {
-        console.error('Failed to load attendance data', error);
+  const fetchAttendance = useCallback(async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) {
+        throw new Error('Access token not found');
       }
-    };
 
-    fetchAttendance();
+      const response = await fetch(
+        `http://localhost:8080/api/classes/${classId}/attendance`,
+        {
+          method: 'GET',
+          headers: {
+            access: accessToken,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch attendance data');
+      }
+
+      const data = await response.json();
+      setAttendance(data.attendanceRecords);
+    } catch (error) {
+      console.error('Failed to load attendance data', error);
+    }
   }, [classId]);
+
+  useEffect(() => {
+    fetchAttendance();
+  }, [fetchAttendance]);
 
   // const filterRecords =
   //   role === '선생'
@@ -60,43 +60,36 @@ export const AttendanceTable = ({ classId, role, userId }) => {
     setModalOpen(true);
   };
 
-  const saveStatus = async newStatus => {
-    console.log(
-      `${selectedRecord.attendanceId} attendance status updated to ${newStatus} successfully`,
-    );
-    setModalOpen(false);
-  };
-
   // 실제 데이터 fetch 코드
-  // const saveStatus = async newStatus => {
-  //   const apiUrl = `/api/classes/${classId}/attendance`;
-  //   const options = {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       access: `${localStorage.getItem('access_token')}`,
-  //     },
-  //     body: JSON.stringify({
-  //       attendanceId: selectedRecord.attendanceId,
-  //       attendanceStatus: newStatus,
-  //     }),
-  //   };
+  const saveStatus = async newStatus => {
+    const apiUrl = `http://localhost:8080/api/classes/${classId}/attendance`;
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        access: `${localStorage.getItem('access_token')}`,
+      },
+      body: JSON.stringify({
+        attendanceId: selectedRecord.attendanceId,
+        attendanceStatus: newStatus,
+      }),
+    };
 
-  //   try {
-  //     const response = await fetch(apiUrl, options);
-  //     const data = await response.json();
+    try {
+      const response = await fetch(apiUrl, options);
+      const data = await response.json();
 
-  //     if (response.ok) {
-  //       console.log(data.message);
-  //       setModalOpen(false);
-  //       await fetchAttendance();
-  //     } else {
-  //       throw new Error(data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Failed to update attendance status:', error.message);
-  //   }
-  // };
+      if (response.ok) {
+        console.log(data.message);
+        setModalOpen(false);
+        await fetchAttendance();
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error('Failed to update attendance status:', error.message);
+    }
+  };
 
   const dates = [
     ...new Set(
