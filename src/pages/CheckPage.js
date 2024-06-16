@@ -151,7 +151,29 @@ export const CheckPage = () => {
       );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch attendance data');
+        // 처음 출석을 시작할 때 404 에러 무시
+        if (response.status === 404) {
+          const startResponse = await fetch(
+            `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                access: accessToken,
+              },
+              body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
+            },
+          );
+
+          if (!startResponse.ok) {
+            const errorData = await startResponse.json();
+            throw new Error(errorData.message);
+          }
+          const startData = await startResponse.json();
+          console.log(startData.message);
+          setIsAttendanceStarted(true);
+          return;
+        }
       }
 
       const data = await response.json();
@@ -199,9 +221,7 @@ export const CheckPage = () => {
       const startData = await startResponse.json();
       console.log(startData.message);
       setIsAttendanceStarted(true);
-    } catch (error) {
-      console.error('Failed to start attendance check', error);
-    }
+    } catch (error) {}
   };
 
   const handleStop = async () => {
@@ -315,19 +335,22 @@ export const CheckPage = () => {
             </div>
           )}
         </div>
+        {/* 출석 완료 모달 */}
+        <Modal
+          isOpen={showAlreadyCheckedModal}
+          onClose={() => setShowAlreadyCheckedModal(false)}
+        >
+          <p>오늘의 출석 체크는 완료되었습니다.</p>
+          <div className="modal-buttons">
+            <Button
+              className="status-modal-button"
+              label="확인"
+              onClick={() => setShowAlreadyCheckedModal(false)}
+              color="#007bff"
+            />
+          </div>
+        </Modal>
       </div>
-      {/* 출석 완료 모달 */}
-      <Modal
-        isOpen={showAlreadyCheckedModal}
-        onClose={() => setShowAlreadyCheckedModal(false)}
-      >
-        <p>오늘의 출석 체크는 완료되었습니다.</p>
-        <div className="modal-buttons">
-          <button onClick={() => setShowAlreadyCheckedModal(false)}>
-            확인
-          </button>
-        </div>
-      </Modal>
     </div>
   );
 };
