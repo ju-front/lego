@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SigninEmail1 } from 'ezy-ui';
 import 'ezy-ui/dist/sign/SignEmail1.css';
 import '../css/SignPage.css';
@@ -7,12 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 export const SigninPage = () => {
   const navigate = useNavigate();
+  const [loginError, setLoginError] = useState('');
 
   const handleOnSubmit = async (email, password) => {
-    // // 서버 연동 이전 임시 코드
-    // navigate('/dashboard');
-
-    // 서버 연동 완료 시 해당 주석 해제
     try {
       const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
@@ -28,10 +25,14 @@ export const SigninPage = () => {
         navigate('/dashboard');
         console.log(data.message);
       } else {
-        throw new Error(data.message);
+        setLoginError(data.message || '이메일 또는 비밀번호를 확인해주세요.');
       }
     } catch (error) {
       console.error('Login failed:', error.message);
+      setLoginError(
+        error.message ||
+          '일시적인 오류로 로그인을 할 수 없습니다. 잠시 후 다시 이용해 주세요.',
+      );
     }
   };
 
@@ -43,6 +44,7 @@ export const SigninPage = () => {
     <div className="page-container">
       <div className="custom-signin">
         <SigninEmail1 onConfirm={handleOnSubmit} />
+        {loginError && <div className="login-error">{loginError}</div>}
         <div className="signup-link" onClick={handleSignUpClick}>
           Sign Up
         </div>

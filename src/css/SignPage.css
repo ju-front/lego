@@ -40,7 +40,12 @@
 .custom-signin .signup-link {
   text-align: center;
   margin-top: 20px;
-  font-size: 1em;
   color: #007bff;
   cursor: pointer;
+}
+
+.login-error {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
 }
