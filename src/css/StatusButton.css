@@ -1,0 +1,4 @@
+.disabled {
+  cursor: none; /* 비활성화 상태에서 기본 커서를 사용 */
+  pointer-events: none; /* 이벤트 비활성화 */
+}

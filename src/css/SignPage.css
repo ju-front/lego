@@ -19,7 +19,7 @@
 .custom-signin input {
   width: 100%;
   padding: 15px;
-  font-size: 1.2em;
+  font-size: 1.2rem;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -29,7 +29,7 @@
 .custom-signin .btn-confirm {
   width: 100%;
   padding: 15px;
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
 
 .custom-signin .btn-confirm.inactive {
@@ -40,7 +40,12 @@
 .custom-signin .signup-link {
   text-align: center;
   margin-top: 20px;
-  font-size: 1em;
   color: #007bff;
   cursor: pointer;
+}
+
+.login-error {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
 }

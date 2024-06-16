@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '../components/Button';
+import '../css/StatusButton.css';
 
 /**
  * 출석 상태를 나타내는 버튼 컴포넌트
@@ -7,7 +8,7 @@ import { Button } from '../components/Button';
  * @param {function} onClick - 버튼 클릭 시 호출할 함수
  * @returns {JSX.Element} 상태에 따른 스타일이 적용된 버튼
  */
-export const StatusButton = ({ status, onClick }) => {
+export const StatusButton = ({ status, onClick, disabled }) => {
   const getStatusColor = status => {
     switch (status) {
       case '출석':
@@ -24,5 +25,12 @@ export const StatusButton = ({ status, onClick }) => {
   // 색상 코드를 Button 컴포넌트에 전달
   const color = getStatusColor(status);
 
-  return <Button label={status} onClick={onClick} color={color} />;
+  return (
+    <Button
+      label={status}
+      className={`${disabled ? 'disabled' : ''}`}
+      onClick={onClick}
+      color={color}
+    />
+  );
 };
