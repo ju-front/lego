@@ -39,21 +39,23 @@ export const AttendanceTable = ({ classId, role, userId }) => {
       }
 
       const data = await response.json();
-      setAttendance(data.attendanceRecords);
-      console.log(data.attendanceRecords);
+
+      const filterRecords =
+        role === '선생'
+          ? data.attendanceRecords
+          : data.attendanceRecords.filter(
+              record => record.studentId === userId,
+            );
+
+      setAttendance(filterRecords);
     } catch (error) {
       console.error('Failed to load attendance data', error);
     }
-  }, [classId]);
+  }, [classId, role, userId]);
 
   useEffect(() => {
     fetchAttendance();
   }, [fetchAttendance]);
-
-  // const filterRecords =
-  //   role === '선생'
-  //     ? attendance
-  //     : attendance.filter(record => record.studentName === userId);
 
   const handleStatusClick = record => {
     console.log('clicked record', record);
@@ -63,6 +65,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
 
   // 실제 데이터 fetch 코드
   const saveStatus = async newStatus => {
+    console.log('#####', selectedRecord.attendanceId, newStatus);
     const apiUrl = `http://localhost:8080/api/classes/${classId}/attendance`;
     const options = {
       method: 'PUT',
