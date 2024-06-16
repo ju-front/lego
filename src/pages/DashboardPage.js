@@ -96,7 +96,7 @@ export const DashboardPage = () => {
             {userData.role === '선생' ? '교수용 대시보드' : '학생용 대시보드'}
           </h1>
           <div className="card-container">
-            {classes.map(classItem => (
+            {classes.map((classItem) => (
               <Card
                 key={classItem.classId}
                 title={classItem.className}

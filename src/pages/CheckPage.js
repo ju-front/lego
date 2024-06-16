@@ -37,7 +37,7 @@ export const CheckPage = () => {
             headers: {
               access: accessToken,
             },
-          },
+          }
         );
 
         if (!response.ok) {
@@ -107,7 +107,7 @@ export const CheckPage = () => {
             headers: {
               access: accessToken,
             },
-          },
+          }
         );
 
         if (!response.ok) {
@@ -146,7 +146,7 @@ export const CheckPage = () => {
             access: accessToken,
           },
           body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
-        },
+        }
       );
 
       if (!response.ok) {
@@ -176,7 +176,7 @@ export const CheckPage = () => {
             'Content-Type': 'application/json',
             access: accessToken,
           },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -212,8 +212,8 @@ export const CheckPage = () => {
     <div className="main-layout">
       <Sidebar links={links} userData={userData} classId={class_id} />
       <div className="main-content-container">
-        <HeaderNav title={title} />
-        <div className="main-content" style={{ backgroundColor: 'green' }}>
+        <HeaderNav title={title} nameClass={`- ${classData.className}`} />
+        <div className="main-content">
           {userData.role === '선생' ? (
             <div>
               <h1>교수용 출석 체크 페이지</h1>
