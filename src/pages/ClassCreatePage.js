@@ -229,25 +229,26 @@ export const ClassCreatePage = () => {
             </div>
             <div className="form-section-addpadding">
               <label className="class-create-label">선택한 학생 리스트</label>
-              <ul>
-                {selectedStudentsList.map(student => (
-                  <li className="studentList" key={student.userId}>
-                    {student.name}
-                    <Button
-                      onClick={() => handleRemoveStudent(student.userId)}
-                      label="x"
-                      className="studentRemoveButton"
-                      color="#1E85F1"
-                    />
-                  </li>
-                ))}
-              </ul>
+              <label> </label>
               <Button
-                label="수업 생성"
+                label="수업 생성 ✅"
                 onClick={handleCreateClass}
                 className="creatButton"
                 color="#1E85F1"
               />
+              <ul>
+                {selectedStudentsList.map(student => (
+                  <li className="studentList" key={student.userId}>
+                    <Button
+                      onClick={() => handleRemoveStudent(student.userId)}
+                      label="x"
+                      className="studentRemoveButton"
+                      color="#CBE5FF"
+                    />
+                    {student.name}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

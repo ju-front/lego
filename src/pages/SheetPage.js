@@ -13,6 +13,7 @@ import 'css/styles.css';
 export const SheetPage = () => {
   const { class_id } = useParams();
   const [userData, setUserData] = useState({});
+  const [classData, setClassData] = useState(null); // 수업 정보를 받아올 상태
 
   const links = [
     { path: '/', label: 'Home' },
@@ -51,7 +52,40 @@ export const SheetPage = () => {
     fetchUserData();
   }, []);
 
-  if (!userData) {
+  // 수업 정보 로드
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+          throw new Error('Access token not found');
+        }
+
+        const response = await fetch(
+          `http://localhost:8080/api/classes/${class_id}`,
+          {
+            method: 'GET',
+            headers: {
+              access: accessToken,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch class data');
+        }
+
+        const data = await response.json();
+        setClassData(data);
+      } catch (error) {
+        console.error('Failed to load class data', error);
+      }
+    };
+
+    fetchClassData();
+  }, [class_id]);
+
+  if (!userData || !classData) {
     return <div>Loading...</div>;
   }
 
@@ -62,8 +96,8 @@ export const SheetPage = () => {
     <div className="main-layout">
       <Sidebar links={links} userData={userData} classId={class_id} />
       <div className="main-content-container">
-        <HeaderNav title={title} />
-        <div className="main-content" style={{ backgroundColor: 'pink' }}>
+        <HeaderNav title={title} nameClass={`- ${classData.className}`} />
+        <div className="main-content">
           {userData.role === '선생' ? (
             <div>
               <h1>교수용 출석 대시보드</h1>
