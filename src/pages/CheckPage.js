@@ -162,39 +162,45 @@ export const CheckPage = () => {
           .map(attendance => new Date(attendance.attendanceDate))
           .sort((a, b) => b - a)[0];
 
+        // 한국 시간으로 변환
+        const recentDateKST = new Date(
+          recentDate.getTime() + 9 * 60 * 60 * 1000,
+        );
+        const recentDateKSTFormatted = recentDateKST
+          .toISOString()
+          .split('T')[0];
+
         const koreaTime = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
         const today = koreaTime.toISOString().split('T')[0];
         // 오늘 출석을 했으면 출석 체크 불가
-        if (recentDate && recentDate.toISOString().split('T')[0] === today) {
+        if (recentDateKSTFormatted && recentDateKSTFormatted === today) {
           setShowAlreadyCheckedModal(true);
           return;
         }
       }
-    } catch (error) {
-      if (error.message === 'Failed to fetch attendance data') {
-        // 첫 번째 출석 시작인 경우
-        const startResponse = await fetch(
-          `http://localhost:8080/api/classes/${class_id}/attendance/start`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              access: accessToken,
-            },
-            body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
-          },
-        );
 
-        if (!startResponse.ok) {
-          const errorData = await startResponse.json();
-          throw new Error(errorData.message);
-        }
-        const startData = await startResponse.json();
-        console.log(startData.message);
-        setIsAttendanceStarted(true);
-      } else {
-        console.error('Failed to start attendance check', error);
+      // 첫 번째 출석 시작이거나 하루가 지난 경우
+      const startResponse = await fetch(
+        `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            access: accessToken,
+          },
+          body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
+        },
+      );
+
+      if (!startResponse.ok) {
+        const errorData = await startResponse.json();
+        throw new Error(errorData.message);
       }
+      const startData = await startResponse.json();
+      console.log(startData.message);
+      setIsAttendanceStarted(true);
+    } catch (error) {
+      console.error('Failed to start attendance check', error);
     }
   };
 
@@ -309,19 +315,19 @@ export const CheckPage = () => {
             </div>
           )}
         </div>
-        {/* 출석 완료 모달 */}
-        <Modal
-          isOpen={showAlreadyCheckedModal}
-          onClose={() => setShowAlreadyCheckedModal(false)}
-        >
-          <p>오늘의 출석 체크는 완료되었습니다.</p>
-          <div className="modal-buttons">
-            <button onClick={() => setShowAlreadyCheckedModal(false)}>
-              확인
-            </button>
-          </div>
-        </Modal>
       </div>
+      {/* 출석 완료 모달 */}
+      <Modal
+        isOpen={showAlreadyCheckedModal}
+        onClose={() => setShowAlreadyCheckedModal(false)}
+      >
+        <p>오늘의 출석 체크는 완료되었습니다.</p>
+        <div className="modal-buttons">
+          <button onClick={() => setShowAlreadyCheckedModal(false)}>
+            확인
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };
