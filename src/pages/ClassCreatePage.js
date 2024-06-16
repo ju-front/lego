@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
-//import { Button } from 'components/Button';
+import { Button } from 'components/Button';
 // import { PathButton } from 'components/PathButton';
 import { Input } from 'components/Input';
 import { Option, Select } from 'components/OptionSelect';
@@ -160,53 +160,59 @@ export const ClassCreatePage = () => {
         <HeaderNav title={title} />
         <div className="main-content">
           <div className="form-container">
-            <div className="form-section" style={{ backgroundColor: 'pink' }}>
-              <div>
-                새로 생성할 수업 이름
+            <div className="form-section">
+              <div className="class-create-div">
+                <label className="class-create-label">
+                  새로 생성할 수업 이름
+                </label>
                 <Input
                   value={className}
                   onChange={(e) => setClassName(e.target.value)}
                 />
               </div>
-              <div>
-                출석 인정 시간
+              <div className="class-create-div">
+                <label className="class-create-label">출석 인정 시간</label>
                 <Select
                   value={lateTime}
                   onChange={(e) => setLateTime(e.target.value)}
                   className="custom-select"
                 >
                   <Option value="" label="몇 분 동안 출석을 진행할까요?" />
+                  <Option value="3" label="3분" />
+                  <Option value="4" label="4분" />
                   <Option value="5" label="5분" />
                   <Option value="10" label="10분" />
-                  <Option value="15" label="15분" />
                   <Option value="20" label="20분" />
                 </Select>
               </div>
-              <div>
-                행, 열 토글
-                <Select
-                  value={deskRows}
-                  onChange={(e) => setDeskRows(e.target.value)}
-                  className="custom-select"
-                >
-                  <Option value="" label="행 (세로줄)" />
-                  {Array.from({ length: 40 }, (_, i) => (
-                    <Option key={i + 1} value={i + 1} label={`${i + 1}행`} />
-                  ))}
-                </Select>
-                <Select
-                  value={deskCols}
-                  onChange={(e) => setDeskCols(e.target.value)}
-                  className="custom-select"
-                >
-                  <Option value="" label="열 (가로줄)" />
-                  {Array.from({ length: 40 }, (_, i) => (
-                    <Option key={i + 1} value={i + 1} label={`${i + 1}열`} />
-                  ))}
-                </Select>
+              <div className="class-create-div">
+                <label className="class-create-label"> 행, 열 토글</label>
+                <div className="desk-div">
+                  <Select
+                    value={deskRows}
+                    onChange={(e) => setDeskRows(e.target.value)}
+                    className="custom-select"
+                  >
+                    <Option value="" label="행 (세로줄)" />
+                    {Array.from({ length: 9 }, (_, i) => (
+                      <Option key={i + 1} value={i + 1} label={`${i + 1}행`} />
+                    ))}
+                  </Select>
+                  <span className="class-create-label"> x </span>
+                  <Select
+                    value={deskCols}
+                    onChange={(e) => setDeskCols(e.target.value)}
+                    className="custom-select"
+                  >
+                    <Option value="" label="열 (가로줄)" />
+                    {Array.from({ length: 9 }, (_, i) => (
+                      <Option key={i + 1} value={i + 1} label={`${i + 1}열`} />
+                    ))}
+                  </Select>
+                </div>
               </div>
-              <div>
-                학생 선택
+              <div className="class-create-div">
+                <label className="class-create-label">학생 선택</label>
                 {students.map((student) => (
                   <div key={student.userId}>
                     <input
@@ -221,22 +227,27 @@ export const ClassCreatePage = () => {
                 ))}
               </div>
             </div>
-            <div
-              className="form-section"
-              style={{ backgroundColor: 'lightblue' }}
-            >
-              <label>선택한 학생 리스트</label>
+            <div className="form-section-addpadding">
+              <label className="class-create-label">선택한 학생 리스트</label>
               <ul>
                 {selectedStudentsList.map((student) => (
-                  <li key={student.userId}>
+                  <li className="studentList" key={student.userId}>
                     {student.name}
-                    <button onClick={() => handleRemoveStudent(student.userId)}>
-                      x
-                    </button>
+                    <Button
+                      onClick={() => handleRemoveStudent(student.userId)}
+                      label="x"
+                      className="studentRemoveButton"
+                      color="#1E85F1"
+                    />
                   </li>
                 ))}
               </ul>
-              <button onClick={handleCreateClass}>수업 생성</button>
+              <Button
+                label="수업 생성"
+                onClick={handleCreateClass}
+                className="creatButton"
+                color="#1E85F1"
+              />
             </div>
           </div>
         </div>
