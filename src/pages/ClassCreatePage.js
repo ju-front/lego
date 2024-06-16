@@ -10,10 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const ClassCreatePage = () => {
   const title = '새로운 수업 생성';
-  const links = [
-    { path: '/', label: 'Home' },
-    { path: '/dashboard', label: '대시보드' },
-  ];
+  const links = [{ path: '/dashboard', label: '대시보드' }];
 
   const [className, setClassName] = useState('');
   const [lateTime, setLateTime] = useState('');
@@ -241,7 +238,7 @@ export const ClassCreatePage = () => {
                   <li className="studentList" key={student.userId}>
                     <Button
                       onClick={() => handleRemoveStudent(student.userId)}
-                      label="x"
+                      label="X"
                       className="studentRemoveButton"
                       color="#CBE5FF"
                     />
