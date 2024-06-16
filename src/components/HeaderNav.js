@@ -13,7 +13,7 @@ import 'css/HeaderNavComponent.css';
 export const HeaderNav = ({ title }) => {
   return (
     <div id="headerNav">
-      <h3>상단바 영역 - {title}</h3>
+      <h3>{title}</h3>
     </div>
   );
 };

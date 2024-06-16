@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar } from 'components/Sidebar';
 import { HeaderNav } from 'components/HeaderNav';
-//import { Button } from 'components/Button';
+import { Button } from 'components/Button';
 // import { PathButton } from 'components/PathButton';
 import { Input } from 'components/Input';
 import { Option, Select } from 'components/OptionSelect';
@@ -9,12 +9,6 @@ import 'css/styles.css';
 import { useNavigate } from 'react-router-dom';
 
 export const ClassCreatePage = () => {
-  /* role은 선생, 학생 두 가지로 구분한다.
-   *
-   * 출석 체크 방 생성페이지는 교수(선생)만 접근 가능하다.
-   * -> role이 선생 경우에만 접근 가능하도록 설정
-   */
-
   const title = '새로운 수업 생성';
   const links = [
     { path: '/', label: 'Home' },
@@ -25,13 +19,11 @@ export const ClassCreatePage = () => {
   const [lateTime, setLateTime] = useState('');
   const [deskRows, setDeskRows] = useState('');
   const [deskCols, setDeskCols] = useState('');
-  const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedStudentsList, setSelectedStudentsList] = useState([]);
   const [students, setStudents] = useState([]);
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
-  // 유저 정보 로드 -> 프로필에 사용
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -61,7 +53,6 @@ export const ClassCreatePage = () => {
     fetchUserData();
   }, []);
 
-  // 학생 목록 로드
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -77,7 +68,7 @@ export const ClassCreatePage = () => {
             headers: {
               access: accessToken,
             },
-          },
+          }
         );
 
         if (!response.ok) {
@@ -93,14 +84,13 @@ export const ClassCreatePage = () => {
         }
       } catch (error) {
         console.error('Error fetching students:', error);
-        setStudents([]); // 에러 발생 시 빈 배열로 설정
+        setStudents([]);
       }
     };
 
     fetchStudents();
   }, []);
 
-  // 랜덤 색상 생성
   const generateRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -110,15 +100,23 @@ export const ClassCreatePage = () => {
     return color;
   };
 
-  const handleAddStudent = () => {
-    const student = students.find(s => s.userId === parseInt(selectedStudent));
-    if (
-      student &&
-      !selectedStudentsList.some(s => s.userId === student.userId)
-    ) {
-      setSelectedStudentsList([...selectedStudentsList, student]);
-      setSelectedStudent(''); // 학생 선택 초기화
+  const handleToggleStudent = (studentId) => {
+    const student = students.find((s) => s.userId === studentId);
+    if (student) {
+      if (selectedStudentsList.some((s) => s.userId === student.userId)) {
+        setSelectedStudentsList(
+          selectedStudentsList.filter((s) => s.userId !== student.userId)
+        );
+      } else {
+        setSelectedStudentsList([...selectedStudentsList, student]);
+      }
     }
+  };
+
+  const handleRemoveStudent = (studentId) => {
+    setSelectedStudentsList(
+      selectedStudentsList.filter((s) => s.userId !== studentId)
+    );
   };
 
   const handleCreateClass = async () => {
@@ -139,7 +137,7 @@ export const ClassCreatePage = () => {
           lateTimeLimit: parseInt(lateTime),
           deskRows: parseInt(deskRows),
           deskColumns: parseInt(deskCols),
-          studentIds: selectedStudentsList.map(student => student.userId),
+          studentIds: selectedStudentsList.map((student) => student.userId),
           classColor: generateRandomColor(),
         }),
       });
@@ -160,86 +158,96 @@ export const ClassCreatePage = () => {
       <Sidebar links={links} userData={userData} />
       <div className="main-content-container">
         <HeaderNav title={title} />
-        <h1 style={{ backgroundColor: 'pink' }}>출석체크 방 생성 페이지</h1>
         <div className="main-content">
           <div className="form-container">
-            <div className="form-section" style={{ backgroundColor: 'pink' }}>
-              <div>
-                수업 이름
+            <div className="form-section">
+              <div className="class-create-div">
+                <label className="class-create-label">
+                  새로 생성할 수업 이름
+                </label>
                 <Input
                   value={className}
-                  onChange={e => setClassName(e.target.value)}
+                  onChange={(e) => setClassName(e.target.value)}
                 />
               </div>
-              <div>
-                지각 처리 시간
+              <div className="class-create-div">
+                <label className="class-create-label">출석 인정 시간</label>
                 <Select
                   value={lateTime}
-                  onChange={e => setLateTime(e.target.value)}
+                  onChange={(e) => setLateTime(e.target.value)}
                   className="custom-select"
                 >
-                  <Option value="" label="시간 선택" />
+                  <Option value="" label="몇 분 동안 출석을 진행할까요?" />
+                  <Option value="3" label="3분" />
+                  <Option value="4" label="4분" />
                   <Option value="5" label="5분" />
                   <Option value="10" label="10분" />
-                  <Option value="15" label="15분" />
                   <Option value="20" label="20분" />
                 </Select>
               </div>
-              <div>
-                행, 열 토글
-                <Select
-                  value={deskRows}
-                  onChange={e => setDeskRows(e.target.value)}
-                  className="custom-select"
-                >
-                  <Option value="" label="행" />
-                  <Option value="1" label="1행" />
-                  <Option value="2" label="2행" />
-                  <Option value="3" label="3행" />
-                  <Option value="4" label="4행" />
-                </Select>
-                <Select
-                  value={deskCols}
-                  onChange={e => setDeskCols(e.target.value)}
-                  className="custom-select"
-                >
-                  <Option value="" label="열" />
-                  <Option value="1" label="1열" />
-                  <Option value="2" label="2열" />
-                  <Option value="3" label="3열" />
-                  <Option value="4" label="4열" />
-                </Select>
+              <div className="class-create-div">
+                <label className="class-create-label"> 행, 열 토글</label>
+                <div className="desk-div">
+                  <Select
+                    value={deskRows}
+                    onChange={(e) => setDeskRows(e.target.value)}
+                    className="custom-select"
+                  >
+                    <Option value="" label="행 (세로줄)" />
+                    {Array.from({ length: 9 }, (_, i) => (
+                      <Option key={i + 1} value={i + 1} label={`${i + 1}행`} />
+                    ))}
+                  </Select>
+                  <span className="class-create-label"> x </span>
+                  <Select
+                    value={deskCols}
+                    onChange={(e) => setDeskCols(e.target.value)}
+                    className="custom-select"
+                  >
+                    <Option value="" label="열 (가로줄)" />
+                    {Array.from({ length: 9 }, (_, i) => (
+                      <Option key={i + 1} value={i + 1} label={`${i + 1}열`} />
+                    ))}
+                  </Select>
+                </div>
               </div>
-              <div>
-                학생 선택 토글
-                <Select
-                  value={selectedStudent}
-                  onChange={e => setSelectedStudent(e.target.value)}
-                  className="custom-select"
-                >
-                  <Option value="" label="학생 선택" />
-                  {students.map(student => (
-                    <Option
-                      key={student.userId}
-                      value={student.userId}
-                      label={student.name}
+              <div className="class-create-div">
+                <label className="class-create-label">학생 선택</label>
+                {students.map((student) => (
+                  <div key={student.userId}>
+                    <input
+                      type="checkbox"
+                      checked={selectedStudentsList.some(
+                        (s) => s.userId === student.userId
+                      )}
+                      onChange={() => handleToggleStudent(student.userId)}
                     />
-                  ))}
-                </Select>
-                <button onClick={handleAddStudent}>추가</button>
+                    {student.name}
+                  </div>
+                ))}
               </div>
             </div>
-            <div
-              className="form-section"
-              style={{ backgroundColor: 'lightblue' }}
-            >
-              <label>선택한 학생 리스트</label>
+            <div className="form-section-addpadding">
+              <label className="class-create-label">선택한 학생 리스트</label>
               <ul>
-                {selectedStudentsList.map((student, index) => (
-                  <li key={index}>{student.name}</li>
+                {selectedStudentsList.map((student) => (
+                  <li className="studentList" key={student.userId}>
+                    {student.name}
+                    <Button
+                      onClick={() => handleRemoveStudent(student.userId)}
+                      label="x"
+                      className="studentRemoveButton"
+                      color="#1E85F1"
+                    />
+                  </li>
                 ))}
               </ul>
-              <button onClick={handleCreateClass}>수업 생성</button>
+              <Button
+                label="수업 생성"
+                onClick={handleCreateClass}
+                className="creatButton"
+                color="#1E85F1"
+              />
             </div>
           </div>
         </div>
