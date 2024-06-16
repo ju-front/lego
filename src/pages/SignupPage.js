@@ -34,7 +34,7 @@ export const SignupPage = () => {
 
       if (response.ok) {
         console.log(data.message);
-        navigate('/signin');
+        navigate('/');
         return;
       }
 
