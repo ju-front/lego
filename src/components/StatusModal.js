@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal';
 import { Button } from '../components/Button';
 import '../css/StatusModal.css';
@@ -17,6 +17,10 @@ import '../css/StatusModal.css';
  */
 export const StatusModal = ({ isOpen, onClose, onSave, initialStatus }) => {
   const [status, setStatus] = useState(initialStatus);
+
+  useEffect(() => {
+    setStatus(initialStatus);
+  }, [initialStatus]);
 
   const handleSave = () => {
     onSave(status);

@@ -68,7 +68,6 @@ export const AttendanceTable = ({ classId, role, userId }) => {
     }
   };
 
-  // 실제 데이터 fetch 코드
   const saveStatus = async newStatus => {
     console.log('#####', selectedRecord.attendanceId, newStatus);
     const apiUrl = `http://localhost:8080/api/classes/${classId}/attendance`;
