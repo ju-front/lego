@@ -167,14 +167,29 @@ export const Desk = ({
       <Modal isOpen={showConfirmModal} onClose={handleCloseModal}>
         <p>해당 자리에 출석하시겠습니까?</p>
         <div className="modal-buttons">
-          <button onClick={handleConfirmAttendance}>예</button>
-          <button onClick={handleCloseModal}>아니오</button>
+          <Button
+            className="status-modal-button"
+            label="예"
+            onClick={handleConfirmAttendance}
+            color="#007bff"
+          />
+          <Button
+            className="status-modal-button"
+            label="아니오"
+            onClick={handleCloseModal}
+            color="#ff6347"
+          />
         </div>
       </Modal>
       <Modal isOpen={showAlertModal} onClose={handleCloseAlertModal}>
         <p>현재 출석시간이 아닙니다.</p>
         <div className="modal-buttons">
-          <button onClick={handleCloseAlertModal}>확인</button>
+          <Button
+            className="status-modal-button"
+            label="확인"
+            onClick={handleCloseAlertModal}
+            color="#007bff"
+          />
         </div>
       </Modal>
     </div>
