@@ -5,6 +5,7 @@ import { HeaderNav } from 'components/HeaderNav';
 import { Button } from 'components/Button';
 import { Timer } from 'components/Timer';
 import { Desk } from 'components/Desk';
+import { Modal } from 'components/Modal';
 import 'css/styles.css';
 import 'css/Timer.css';
 
@@ -20,6 +21,7 @@ export const CheckPage = () => {
   const [userData, setUserData] = useState(null); // 사용자 정보를 받아올 상태
   const [isAttendanceStarted, setIsAttendanceStarted] = useState(false);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [showAlreadyCheckedModal, setShowAlreadyCheckedModal] = useState(false);
 
   // 수업방 상세 조회
   useEffect(() => {
@@ -37,7 +39,7 @@ export const CheckPage = () => {
             headers: {
               access: accessToken,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -107,7 +109,7 @@ export const CheckPage = () => {
             headers: {
               access: accessToken,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -131,33 +133,68 @@ export const CheckPage = () => {
 
   // 출석 시작 버튼 눌렀을 때
   const handleStartClick = async () => {
-    try {
-      const accessToken = localStorage.getItem('access_token');
-      if (!accessToken) {
-        throw new Error('Access token not found');
-      }
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      throw new Error('Access token not found');
+    }
 
+    try {
+      // 가장 최근의 출석 날짜 확인
       const response = await fetch(
-        `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+        `http://localhost:8080/api/classes/${class_id}/attendance`,
         {
-          method: 'POST',
+          method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
             access: accessToken,
           },
-          body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
-        }
+        },
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
+        throw new Error('Failed to fetch attendance data');
       }
+
       const data = await response.json();
-      console.log(data.message);
-      setIsAttendanceStarted(true);
+
+      if (data.attendanceRecords.length > 0) {
+        const recentDate = data.attendanceRecords
+          .flatMap(record => record.attendanceRecords)
+          .map(attendance => new Date(attendance.attendanceDate))
+          .sort((a, b) => b - a)[0];
+
+        const koreaTime = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
+        const today = koreaTime.toISOString().split('T')[0];
+        // 오늘 출석을 했으면 출석 체크 불가
+        if (recentDate && recentDate.toISOString().split('T')[0] === today) {
+          setShowAlreadyCheckedModal(true);
+          return;
+        }
+      }
     } catch (error) {
-      console.error('Failed to start attendance check', error);
+      if (error.message === 'Failed to fetch attendance data') {
+        // 첫 번째 출석 시작인 경우
+        const startResponse = await fetch(
+          `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              access: accessToken,
+            },
+            body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
+          },
+        );
+
+        if (!startResponse.ok) {
+          const errorData = await startResponse.json();
+          throw new Error(errorData.message);
+        }
+        const startData = await startResponse.json();
+        console.log(startData.message);
+        setIsAttendanceStarted(true);
+      } else {
+        console.error('Failed to start attendance check', error);
+      }
     }
   };
 
@@ -176,7 +213,7 @@ export const CheckPage = () => {
             'Content-Type': 'application/json',
             access: accessToken,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -198,7 +235,6 @@ export const CheckPage = () => {
   };
 
   const links = [
-    { path: '/', label: 'Home' },
     { path: '/dashboard', label: '대시보드' },
     { path: '/check', label: '출석 체크 페이지' },
     { path: '/sheet', label: '출결 현황' },
@@ -213,10 +249,9 @@ export const CheckPage = () => {
       <Sidebar links={links} userData={userData} classId={class_id} />
       <div className="main-content-container">
         <HeaderNav title={title} nameClass={`- ${classData.className}`} />
-        <div className="main-content">
+        <div className="main-content" style={{ backgroundColor: 'green' }}>
           {userData.role === '선생' ? (
             <div>
-              <h1>교수용 출석 체크 페이지</h1>
               <div className="timer-wrapper">
                 <div className="timer-container">
                   <Timer
@@ -233,7 +268,7 @@ export const CheckPage = () => {
                 isAttendanceStarted={isAttendanceStarted}
                 classId={class_id}
                 attendanceRecords={attendanceRecords}
-                currentUser={userData.name}
+                currentUser={userData}
               ></Desk>
               <div className="attendance-buttons">
                 {isAttendanceStarted ? (
@@ -253,7 +288,6 @@ export const CheckPage = () => {
             </div>
           ) : (
             <div>
-              <h1>학생용 출석 체크 페이지</h1>
               <div className="timer-wrapper">
                 <div className="timer-container">
                   <Timer
@@ -270,11 +304,23 @@ export const CheckPage = () => {
                 isAttendanceStarted={isAttendanceStarted}
                 classId={class_id}
                 attendanceRecords={attendanceRecords}
-                currentUser={userData.name}
+                currentUser={userData}
               ></Desk>
             </div>
           )}
         </div>
+        {/* 출석 완료 모달 */}
+        <Modal
+          isOpen={showAlreadyCheckedModal}
+          onClose={() => setShowAlreadyCheckedModal(false)}
+        >
+          <p>오늘의 출석 체크는 완료되었습니다.</p>
+          <div className="modal-buttons">
+            <button onClick={() => setShowAlreadyCheckedModal(false)}>
+              확인
+            </button>
+          </div>
+        </Modal>
       </div>
     </div>
   );
