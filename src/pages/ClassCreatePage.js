@@ -68,7 +68,7 @@ export const ClassCreatePage = () => {
             headers: {
               access: accessToken,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -100,12 +100,12 @@ export const ClassCreatePage = () => {
     return color;
   };
 
-  const handleToggleStudent = (studentId) => {
-    const student = students.find((s) => s.userId === studentId);
+  const handleToggleStudent = studentId => {
+    const student = students.find(s => s.userId === studentId);
     if (student) {
-      if (selectedStudentsList.some((s) => s.userId === student.userId)) {
+      if (selectedStudentsList.some(s => s.userId === student.userId)) {
         setSelectedStudentsList(
-          selectedStudentsList.filter((s) => s.userId !== student.userId)
+          selectedStudentsList.filter(s => s.userId !== student.userId),
         );
       } else {
         setSelectedStudentsList([...selectedStudentsList, student]);
@@ -113,9 +113,9 @@ export const ClassCreatePage = () => {
     }
   };
 
-  const handleRemoveStudent = (studentId) => {
+  const handleRemoveStudent = studentId => {
     setSelectedStudentsList(
-      selectedStudentsList.filter((s) => s.userId !== studentId)
+      selectedStudentsList.filter(s => s.userId !== studentId),
     );
   };
 
@@ -137,7 +137,7 @@ export const ClassCreatePage = () => {
           lateTimeLimit: parseInt(lateTime),
           deskRows: parseInt(deskRows),
           deskColumns: parseInt(deskCols),
-          studentIds: selectedStudentsList.map((student) => student.userId),
+          studentIds: selectedStudentsList.map(student => student.userId),
           classColor: generateRandomColor(),
         }),
       });
@@ -167,14 +167,14 @@ export const ClassCreatePage = () => {
                 </label>
                 <Input
                   value={className}
-                  onChange={(e) => setClassName(e.target.value)}
+                  onChange={e => setClassName(e.target.value)}
                 />
               </div>
               <div className="class-create-div">
                 <label className="class-create-label">출석 인정 시간</label>
                 <Select
                   value={lateTime}
-                  onChange={(e) => setLateTime(e.target.value)}
+                  onChange={e => setLateTime(e.target.value)}
                   className="custom-select"
                 >
                   <Option value="" label="몇 분 동안 출석을 진행할까요?" />
@@ -190,7 +190,7 @@ export const ClassCreatePage = () => {
                 <div className="desk-div">
                   <Select
                     value={deskRows}
-                    onChange={(e) => setDeskRows(e.target.value)}
+                    onChange={e => setDeskRows(e.target.value)}
                     className="custom-select"
                   >
                     <Option value="" label="행 (세로줄)" />
@@ -201,7 +201,7 @@ export const ClassCreatePage = () => {
                   <span className="class-create-label"> x </span>
                   <Select
                     value={deskCols}
-                    onChange={(e) => setDeskCols(e.target.value)}
+                    onChange={e => setDeskCols(e.target.value)}
                     className="custom-select"
                   >
                     <Option value="" label="열 (가로줄)" />
@@ -213,12 +213,12 @@ export const ClassCreatePage = () => {
               </div>
               <div className="class-create-div">
                 <label className="class-create-label">학생 선택</label>
-                {students.map((student) => (
+                {students.map(student => (
                   <div key={student.userId}>
                     <input
                       type="checkbox"
                       checked={selectedStudentsList.some(
-                        (s) => s.userId === student.userId
+                        s => s.userId === student.userId,
                       )}
                       onChange={() => handleToggleStudent(student.userId)}
                     />
@@ -237,7 +237,7 @@ export const ClassCreatePage = () => {
                 color="#1E85F1"
               />
               <ul>
-                {selectedStudentsList.map((student) => (
+                {selectedStudentsList.map(student => (
                   <li className="studentList" key={student.userId}>
                     <Button
                       onClick={() => handleRemoveStudent(student.userId)}
