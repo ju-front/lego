@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { CommonTable } from 'ezy-ui';
 import { StatusButton } from './StatusButton';
 import { StatusModal } from './StatusModal';
+import '../css/AttendanceTable.css';
 
 /**
  * 출석 데이터를 테이블 형태로 표시하고, 개별 출석 상태를 변경할 수 있는 모달을 제공하는 컴포넌트입니다.
@@ -146,7 +147,13 @@ export const AttendanceTable = ({ classId, role, userId }) => {
 
   return (
     <>
-      <CommonTable colDefs={columns} data={tableData} />
+      <CommonTable
+        className="attendance-table"
+        colDefs={columns}
+        data={tableData}
+        isIdx={true}
+        idxLabel="Index"
+      />
       <StatusModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}

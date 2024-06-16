@@ -68,7 +68,7 @@ export const SheetPage = () => {
             headers: {
               access: accessToken,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -100,13 +100,11 @@ export const SheetPage = () => {
         <div className="main-content">
           {userData.role === '선생' ? (
             <div>
-              <h1>교수용 출석 대시보드</h1>
               {/* 교수용 대시보드 관련 콘텐츠 */}
               <AttendanceTable classId={class_id} role={userData.role} />
             </div>
           ) : (
             <div>
-              <h1>학생용 출석 대시보드</h1>
               {/* 학생용 대시보드 관련 콘텐츠 */}
               <AttendanceTable
                 classId={class_id}
