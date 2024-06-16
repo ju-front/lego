@@ -11,12 +11,12 @@ import 'css/styles.css';
  */
 
 export const SheetPage = () => {
+  const title = '출결 현황';
   const { class_id } = useParams();
   const [userData, setUserData] = useState({});
   const [classData, setClassData] = useState(null); // 수업 정보를 받아올 상태
 
   const links = [
-    { path: '/', label: 'Home' },
     { path: '/dashboard', label: '대시보드' },
     { path: '/check', label: '출석 체크 페이지' },
     { path: '/sheet', label: '출결 현황' },
@@ -88,9 +88,6 @@ export const SheetPage = () => {
   if (!userData || !classData) {
     return <div>Loading...</div>;
   }
-
-  const title =
-    userData.role === '선생' ? '교수용 출석 대시보드' : '학생용 출석 대시보드';
 
   return (
     <div className="main-layout">

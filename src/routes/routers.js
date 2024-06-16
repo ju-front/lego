@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Home from 'pages/Home';
+// import Home from 'pages/Home';
 import { SigninPage } from 'pages/SigninPage';
 import { SignupPage } from 'pages/SignupPage';
 import { DashboardPage } from 'pages/DashboardPage';
@@ -16,14 +16,14 @@ const userRole = 'Teacher';
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
-    children: [],
-  },
-  {
-    path: 'signin',
     element: <SigninPage />,
     children: [],
   },
+  // {
+  //   path: 'signin',
+  //   element: <SigninPage />,
+  //   children: [],
+  // },
   {
     path: 'signup',
     element: <SignupPage />,

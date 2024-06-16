@@ -10,7 +10,7 @@ import { Modal } from './Modal';
  * @param {boolean} isAttendanceStarted - 출석 시작 여부
  * @param {array} attendanceRecords - 출석 기록
  * @param {number} classId - 클래스 ID
- * @param {string} currentUser - 현재 사용자 이름
+ * @param {object} currentUser - 현재 사용자 정보 객체
  * @returns {JSX.Element} 책상 컴포넌트
  */
 export const Desk = ({
@@ -37,7 +37,11 @@ export const Desk = ({
       .map(() => Array(column).fill(null));
 
     attendanceRecords.forEach(record => {
-      updatedStatus[record.deskRow][record.deskColumn] = record.studentName;
+      updatedStatus[record.deskRow][record.deskColumn] = {
+        studentName: record.studentName,
+        attendanceId: record.attendanceId,
+        studentId: record.studentId,
+      };
     });
 
     setAttendanceStatus(updatedStatus);
@@ -65,29 +69,43 @@ export const Desk = ({
     setShowAlertModal(false);
   }
 
-  function handleConfirmAttendance() {
-    const updatedStatus = [...attendanceStatus];
-    updatedStatus[selectedDesk.rowIndex][selectedDesk.columnIndex] =
-      currentUser;
-    setAttendanceStatus(updatedStatus);
-    setShowConfirmModal(false);
-    setSelectedDesk(null);
+  async function handleConfirmAttendance() {
+    const existingRecord = attendanceRecords.find(
+      record => record.studentId === currentUser.userId,
+    );
 
-    // 서버로 출석 정보 보내기
-    const sendAttendance = async () => {
-      const accessToken = localStorage.getItem('access_token');
-      if (!accessToken) {
-        console.log('Access token not found');
+    if (existingRecord) {
+      // 이미 출석한 학생이 다른 자리에 출석하려고 하는 경우
+      const response = await fetch(
+        `http://localhost:8080/api/classes/${classId}/attendance/student`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            access: localStorage.getItem('access_token'),
+          },
+          body: JSON.stringify({
+            attendanceId: existingRecord.attendanceId,
+            deskRow: selectedDesk.rowIndex,
+            deskColumn: selectedDesk.columnIndex,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.log(errorData.message);
         return;
       }
-
+    } else {
+      // 새로운 출석 정보 생성
       const response = await fetch(
         `http://localhost:8080/api/classes/${classId}/attendance/student`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            access: accessToken,
+            access: localStorage.getItem('access_token'),
           },
           body: JSON.stringify({
             attendanceDate: new Date(
@@ -102,12 +120,20 @@ export const Desk = ({
 
       if (!response.ok) {
         console.log('Failed to send attendance');
-      } else {
-        console.log('Attendance sent successfully');
+        return;
       }
+    }
+
+    const updatedStatus = [...attendanceStatus];
+    updatedStatus[selectedDesk.rowIndex][selectedDesk.columnIndex] = {
+      studentName: currentUser.name,
+      attendanceId: existingRecord ? existingRecord.attendanceId : null,
+      studentId: currentUser.userId,
     };
 
-    sendAttendance();
+    setAttendanceStatus(updatedStatus);
+    setShowConfirmModal(false);
+    setSelectedDesk(null);
   }
 
   return (
@@ -121,12 +147,12 @@ export const Desk = ({
                 <Button
                   className="desk-cell"
                   label={
-                    attendanceStatus[rowIndex][columnIndex]
-                      ? `${attendanceStatus[rowIndex][columnIndex]}`
+                    attendanceStatus[rowIndex][columnIndex]?.studentName
+                      ? `${attendanceStatus[rowIndex][columnIndex].studentName}`
                       : `${rowIndex + 1},${columnIndex + 1}`
                   }
                   color={
-                    attendanceStatus[rowIndex][columnIndex]
+                    attendanceStatus[rowIndex][columnIndex]?.studentName
                       ? '#4caf50'
                       : '#b1cde9'
                   }

@@ -11,7 +11,6 @@ import 'css/SideBarComponent.css';
  *
  * DB의 경우 User 테이블의 역할(role) 컬럼에 따라 사용자의 역할을 구분한다.
  *
- * Home은 개발자 모드에서만 보여진다.
  * 링크 목록은 페이지에 따라 다르게 보여진다.
  * 로그아웃은 공통으로 들어간다.
  *
@@ -26,8 +25,10 @@ export const Sidebar = ({ links, userData, classId }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
-    navigate('/signin');
+    navigate('/');
   };
+
+  const displayRole = userData.role === '선생' ? '선생님' : userData.role;
 
   return (
     <div id="sidebar">
@@ -35,7 +36,7 @@ export const Sidebar = ({ links, userData, classId }) => {
         <div className="profile">
           <div className="profile-circle">{userData.name.charAt(0)}</div>
           <div className="profile-username">{userData.name}</div>
-          <div className="profile-role">{userData.role}</div>
+          <div className="profile-role">{displayRole}</div>
         </div>
       )}
       {links && (

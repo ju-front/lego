@@ -6,23 +6,20 @@ import { PathButton } from 'components/PathButton';
 import 'css/styles.css';
 
 /**
- * @returns {JSX.Element} 출석 페이지 대시보드
+ * @returns {JSX.Element} 대시보드
  * @constructor
  * 출석 체크를 하는 수업들의 목록을 보여주는 페이지
  */
 
 export const DashboardPage = () => {
   /*
-   * 출석 페이지 대시보드는 어떤 role이든 공통 컴포넌트 UI가 통일된다.
+   * 대시보드는 어떤 role이든 공통 컴포넌트 UI가 통일된다.
    */
-  const title = '출석 페이지 대시보드';
+  const title = '대시보드';
   const [classes, setClasses] = useState([]); // 수업 목록을 받아올 상태
   const [userData, setUserData] = useState({}); // 사용자 정보를 받아올 상태
 
-  const links = [
-    { path: '/', label: 'Home' },
-    { path: '/dashboard', label: '대시보드' },
-  ];
+  const links = [{ path: '/dashboard', label: '대시보드' }];
 
   // 서버와 연동
   useEffect(() => {
@@ -92,11 +89,8 @@ export const DashboardPage = () => {
         <HeaderNav title={title} />
         <div className="main-content" style={{ backgroundColor: 'brown' }}>
           {/* 대시보드 관련 콘텐츠 */}
-          <h1>
-            {userData.role === '선생' ? '교수용 대시보드' : '학생용 대시보드'}
-          </h1>
           <div className="card-container">
-            {classes.map((classItem) => (
+            {classes.map(classItem => (
               <Card
                 key={classItem.classId}
                 title={classItem.className}
