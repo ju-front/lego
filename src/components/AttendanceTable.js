@@ -58,9 +58,13 @@ export const AttendanceTable = ({ classId, role, userId }) => {
   }, [fetchAttendance]);
 
   const handleStatusClick = record => {
-    console.log('clicked record', record);
-    setSelectedRecord(record);
-    setModalOpen(true);
+    if (role === '선생') {
+      console.log('clicked record', record);
+      setSelectedRecord(record);
+      setModalOpen(true);
+    } else {
+      console.log('Access denied: Students cannot modify attendance records.');
+    }
   };
 
   // 실제 데이터 fetch 코드
@@ -123,6 +127,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
         <StatusButton
           status={data.attendanceStatus}
           onClick={() => handleStatusClick(data)}
+          disabled={role !== '선생'}
         />
       ),
     })),
