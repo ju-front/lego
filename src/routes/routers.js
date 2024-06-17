@@ -13,41 +13,46 @@ import { SheetPage } from 'pages/SheetPage';
  */
 const userRole = 'Teacher';
 
-export const router = createBrowserRouter([
-  {
-    path: 'https://ju-front.github.io/lego/',
-    element: <SigninPage />,
-    children: [],
-  },
-  // {
-  //   path: 'signin',
-  //   element: <SigninPage />,
-  //   children: [],
-  // },
-  {
-    path: 'signup',
-    element: <SignupPage />,
-    children: [],
-  },
+export const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <SigninPage />,
+      children: [],
+    },
+    // {
+    //   path: 'signin',
+    //   element: <SigninPage />,
+    //   children: [],
+    // },
+    {
+      path: 'signup',
+      element: <SignupPage />,
+      children: [],
+    },
 
+    {
+      path: 'dashboard',
+      element: <DashboardPage />,
+      children: [],
+    },
+    {
+      path: 'class-create',
+      element: <ClassCreatePage />,
+      children: [],
+    },
+    {
+      path: 'check/:class_id',
+      element: <CheckPage role={userRole} />,
+      children: [],
+    },
+    {
+      path: 'sheet/:class_id',
+      element: <SheetPage role={userRole} />,
+      children: [],
+    },
+  ],
   {
-    path: 'dashboard',
-    element: <DashboardPage />,
-    children: [],
+    basename: '/lego',
   },
-  {
-    path: 'class-create',
-    element: <ClassCreatePage />,
-    children: [],
-  },
-  {
-    path: 'check/:class_id',
-    element: <CheckPage role={userRole} />,
-    children: [],
-  },
-  {
-    path: 'sheet/:class_id',
-    element: <SheetPage role={userRole} />,
-    children: [],
-  },
-]);
+);
