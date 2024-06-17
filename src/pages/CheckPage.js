@@ -275,7 +275,7 @@ export const CheckPage = () => {
       <Sidebar links={links} userData={userData} classId={class_id} />
       <div className="main-content-container">
         <HeaderNav title={title} nameClass={`- ${classData.className}`} />
-        <div className="main-content" style={{ backgroundColor: 'green' }}>
+        <div className="main-content">
           {userData.role === '선생' ? (
             <div>
               <div className="timer-wrapper">

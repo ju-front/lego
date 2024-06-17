@@ -87,7 +87,7 @@ export const DashboardPage = () => {
       <Sidebar links={links} userData={userData} />
       <div className="main-content-container">
         <HeaderNav title={title} />
-        <div className="main-content" style={{ backgroundColor: 'brown' }}>
+        <div className="main-content">
           {/* 대시보드 관련 콘텐츠 */}
           <div className="card-container">
             {classes.map(classItem => (
