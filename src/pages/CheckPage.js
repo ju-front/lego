@@ -151,7 +151,29 @@ export const CheckPage = () => {
       );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch attendance data');
+        // 처음 출석을 시작할 때 404 에러 무시
+        if (response.status === 404) {
+          const startResponse = await fetch(
+            `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                access: accessToken,
+              },
+              body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
+            },
+          );
+
+          if (!startResponse.ok) {
+            const errorData = await startResponse.json();
+            throw new Error(errorData.message);
+          }
+          const startData = await startResponse.json();
+          console.log(startData.message);
+          setIsAttendanceStarted(true);
+          return;
+        }
       }
 
       const data = await response.json();
@@ -162,40 +184,44 @@ export const CheckPage = () => {
           .map(attendance => new Date(attendance.attendanceDate))
           .sort((a, b) => b - a)[0];
 
+        // 한국 시간으로 변환
+        const recentDateKST = new Date(
+          recentDate.getTime() + 9 * 60 * 60 * 1000,
+        );
+        const recentDateKSTFormatted = recentDateKST
+          .toISOString()
+          .split('T')[0];
+
         const koreaTime = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
         const today = koreaTime.toISOString().split('T')[0];
         // 오늘 출석을 했으면 출석 체크 불가
-        if (recentDate && recentDate.toISOString().split('T')[0] === today) {
+        if (recentDateKSTFormatted && recentDateKSTFormatted === today) {
           setShowAlreadyCheckedModal(true);
           return;
         }
       }
-    } catch (error) {
-      if (error.message === 'Failed to fetch attendance data') {
-        // 첫 번째 출석 시작인 경우
-        const startResponse = await fetch(
-          `http://localhost:8080/api/classes/${class_id}/attendance/start`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              access: accessToken,
-            },
-            body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
-          },
-        );
 
-        if (!startResponse.ok) {
-          const errorData = await startResponse.json();
-          throw new Error(errorData.message);
-        }
-        const startData = await startResponse.json();
-        console.log(startData.message);
-        setIsAttendanceStarted(true);
-      } else {
-        console.error('Failed to start attendance check', error);
+      // 첫 번째 출석 시작이거나 하루가 지난 경우
+      const startResponse = await fetch(
+        `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            access: accessToken,
+          },
+          body: JSON.stringify({ lateTimeLimit: classData.lateTimeLimit }),
+        },
+      );
+
+      if (!startResponse.ok) {
+        const errorData = await startResponse.json();
+        throw new Error(errorData.message);
       }
-    }
+      const startData = await startResponse.json();
+      console.log(startData.message);
+      setIsAttendanceStarted(true);
+    } catch (error) {}
   };
 
   const handleStop = async () => {
@@ -249,7 +275,7 @@ export const CheckPage = () => {
       <Sidebar links={links} userData={userData} classId={class_id} />
       <div className="main-content-container">
         <HeaderNav title={title} nameClass={`- ${classData.className}`} />
-        <div className="main-content" style={{ backgroundColor: 'green' }}>
+        <div className="main-content">
           {userData.role === '선생' ? (
             <div>
               <div className="timer-wrapper">
@@ -316,9 +342,12 @@ export const CheckPage = () => {
         >
           <p>오늘의 출석 체크는 완료되었습니다.</p>
           <div className="modal-buttons">
-            <button onClick={() => setShowAlreadyCheckedModal(false)}>
-              확인
-            </button>
+            <Button
+              className="status-modal-button"
+              label="확인"
+              onClick={() => setShowAlreadyCheckedModal(false)}
+              color="#007bff"
+            />
           </div>
         </Modal>
       </div>
