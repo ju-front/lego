@@ -15,7 +15,7 @@ const userRole = 'Teacher';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: 'https://ju-front.github.io/lego/',
     element: <SigninPage />,
     children: [],
   },
