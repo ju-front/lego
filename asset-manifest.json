@@ -1,12 +1,15 @@
 {
   "files": {
-    "main.js": "/static/js/main.67287d4c.js",
-    "static/js/453.acf3ecb7.chunk.js": "/static/js/453.acf3ecb7.chunk.js",
-    "index.html": "/index.html",
-    "main.67287d4c.js.map": "/static/js/main.67287d4c.js.map",
-    "453.acf3ecb7.chunk.js.map": "/static/js/453.acf3ecb7.chunk.js.map"
+    "main.css": "/lego/static/css/main.d8db26d4.css",
+    "main.js": "/lego/static/js/main.4808d77c.js",
+    "static/js/453.acf3ecb7.chunk.js": "/lego/static/js/453.acf3ecb7.chunk.js",
+    "index.html": "/lego/index.html",
+    "main.d8db26d4.css.map": "/lego/static/css/main.d8db26d4.css.map",
+    "main.4808d77c.js.map": "/lego/static/js/main.4808d77c.js.map",
+    "453.acf3ecb7.chunk.js.map": "/lego/static/js/453.acf3ecb7.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.67287d4c.js"
+    "static/css/main.d8db26d4.css",
+    "static/js/main.4808d77c.js"
   ]
 }
