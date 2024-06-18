@@ -22,6 +22,8 @@ export const CheckPage = () => {
   const [isAttendanceStarted, setIsAttendanceStarted] = useState(false);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [showAlreadyCheckedModal, setShowAlreadyCheckedModal] = useState(false);
+  const [showConfirmStopModal, setShowConfirmStopModal] = useState(false); // 출석 종료 확인 모달
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // 수업방 상세 조회
   useEffect(() => {
@@ -32,15 +34,12 @@ export const CheckPage = () => {
           throw new Error('Access token not found');
         }
 
-        const response = await fetch(
-          `http://localhost:8080/api/classes/${class_id}`,
-          {
-            method: 'GET',
-            headers: {
-              access: accessToken,
-            },
+        const response = await fetch(`${apiUrl}/api/classes/${class_id}`, {
+          method: 'GET',
+          headers: {
+            access: accessToken,
           },
-        );
+        });
 
         if (!response.ok) {
           throw new Error('Failed to fetch class data');
@@ -61,7 +60,7 @@ export const CheckPage = () => {
     };
 
     fetchClassData();
-  }, [class_id]);
+  }, [class_id, apiUrl]);
 
   // 유저 정보 로드 -> 프로필에 사용
   useEffect(() => {
@@ -72,7 +71,7 @@ export const CheckPage = () => {
           throw new Error('Access token not found');
         }
 
-        const response = await fetch('http://localhost:8080/api/user', {
+        const response = await fetch(`${apiUrl}/api/user`, {
           method: 'GET',
           headers: {
             access: accessToken,
@@ -91,7 +90,7 @@ export const CheckPage = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [apiUrl]);
 
   // 자리 배치 정보 로드
   useEffect(() => {
@@ -103,7 +102,7 @@ export const CheckPage = () => {
         }
 
         const response = await fetch(
-          `http://localhost:8080/api/classes/${class_id}/attendance/student`,
+          `${apiUrl}/api/classes/${class_id}/attendance/student`,
           {
             method: 'GET',
             headers: {
@@ -129,7 +128,7 @@ export const CheckPage = () => {
     const intervalId = setInterval(fetchAttendanceRecords, 1000);
 
     return () => clearInterval(intervalId);
-  }, [class_id]);
+  }, [class_id, apiUrl]);
 
   // 출석 시작 버튼 눌렀을 때
   const handleStartClick = async () => {
@@ -141,7 +140,7 @@ export const CheckPage = () => {
     try {
       // 가장 최근의 출석 날짜 확인
       const response = await fetch(
-        `http://localhost:8080/api/classes/${class_id}/attendance`,
+        `${apiUrl}/api/classes/${class_id}/attendance`,
         {
           method: 'GET',
           headers: {
@@ -154,7 +153,7 @@ export const CheckPage = () => {
         // 처음 출석을 시작할 때 404 에러 무시
         if (response.status === 404) {
           const startResponse = await fetch(
-            `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+            `${apiUrl}/api/classes/${class_id}/attendance/start`,
             {
               method: 'POST',
               headers: {
@@ -203,7 +202,7 @@ export const CheckPage = () => {
 
       // 첫 번째 출석 시작이거나 하루가 지난 경우
       const startResponse = await fetch(
-        `http://localhost:8080/api/classes/${class_id}/attendance/start`,
+        `${apiUrl}/api/classes/${class_id}/attendance/start`,
         {
           method: 'POST',
           headers: {
@@ -232,7 +231,7 @@ export const CheckPage = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8080/api/classes/${class_id}/attendance/stop`,
+        `${apiUrl}/api/classes/${class_id}/attendance/stop`,
         {
           method: 'POST',
           headers: {
@@ -253,6 +252,15 @@ export const CheckPage = () => {
     } catch (error) {
       console.error('Failed to stop attendance check', error);
     }
+  };
+
+  const handleStopClick = () => {
+    setShowConfirmStopModal(true);
+  };
+
+  const handleConfirmStop = () => {
+    handleStop();
+    setShowConfirmStopModal(false);
   };
 
   const handleTimerComplete = () => {
@@ -301,7 +309,7 @@ export const CheckPage = () => {
                   <Button
                     label="출석 종료"
                     color="#ff6347"
-                    onClick={handleStop}
+                    onClick={handleStopClick}
                   />
                 ) : (
                   <Button
@@ -347,6 +355,27 @@ export const CheckPage = () => {
               label="확인"
               onClick={() => setShowAlreadyCheckedModal(false)}
               color="#007bff"
+            />
+          </div>
+        </Modal>
+        {/* 출석 종료 확인 모달 */}
+        <Modal
+          isOpen={showConfirmStopModal}
+          onClose={() => setShowConfirmStopModal(false)}
+        >
+          <p>출석을 종료하시겠습니까? (출석은 하루에 한번만 가능합니다.)</p>
+          <div className="modal-buttons">
+            <Button
+              className="status-modal-button"
+              label="확인"
+              onClick={handleConfirmStop}
+              color="#007bff"
+            />
+            <Button
+              className="status-modal-button"
+              label="취소"
+              onClick={() => setShowConfirmStopModal(false)}
+              color="#ff6347"
             />
           </div>
         </Modal>
