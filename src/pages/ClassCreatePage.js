@@ -20,6 +20,7 @@ export const ClassCreatePage = () => {
   const [students, setStudents] = useState([]);
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,7 +30,7 @@ export const ClassCreatePage = () => {
           throw new Error('Access token not found');
         }
 
-        const response = await fetch('http://localhost:8080/api/user', {
+        const response = await fetch(`${apiUrl}/api/user`, {
           method: 'GET',
           headers: {
             access: accessToken,
@@ -48,7 +49,7 @@ export const ClassCreatePage = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [apiUrl]);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -58,15 +59,12 @@ export const ClassCreatePage = () => {
           throw new Error('Access token not found');
         }
 
-        const response = await fetch(
-          'http://localhost:8080/api/user/students',
-          {
-            method: 'GET',
-            headers: {
-              access: accessToken,
-            },
+        const response = await fetch(`${apiUrl}/api/user/students`, {
+          method: 'GET',
+          headers: {
+            access: accessToken,
           },
-        );
+        });
 
         if (!response.ok) {
           throw new Error('Failed to fetch students');
@@ -86,8 +84,9 @@ export const ClassCreatePage = () => {
     };
 
     fetchStudents();
-  }, []);
+  }, [apiUrl]);
 
+  // 랜덤한 색상 생성
   const generateRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -123,7 +122,7 @@ export const ClassCreatePage = () => {
         throw new Error('Access token not found');
       }
 
-      const response = await fetch('http://localhost:8080/api/classes', {
+      const response = await fetch(`${apiUrl}/api/classes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

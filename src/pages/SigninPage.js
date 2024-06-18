@@ -8,10 +8,11 @@ import { useNavigate } from 'react-router-dom';
 export const SigninPage = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleOnSubmit = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:8080/login', {
+      const response = await fetch(`${apiUrl}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

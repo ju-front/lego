@@ -18,7 +18,7 @@ export const DashboardPage = () => {
   const title = '대시보드';
   const [classes, setClasses] = useState([]); // 수업 목록을 받아올 상태
   const [userData, setUserData] = useState({}); // 사용자 정보를 받아올 상태
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const links = [{ path: '/dashboard', label: '대시보드' }];
 
   // 서버와 연동
@@ -30,7 +30,7 @@ export const DashboardPage = () => {
           throw new Error('Access token not found');
         }
 
-        const response = await fetch('http://localhost:8080/api/user', {
+        const response = await fetch(`${apiUrl}/api/user`, {
           method: 'GET',
           headers: {
             access: accessToken,
@@ -49,10 +49,9 @@ export const DashboardPage = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [apiUrl]);
 
   // 수업 목록 가져오기
-  // 실제로는 서버에서 사용자의 수업 목록을 받아온다.
   useEffect(() => {
     const fetchClasses = async () => {
       try {
@@ -61,7 +60,7 @@ export const DashboardPage = () => {
           throw new Error('No access token found');
         }
 
-        const response = await fetch('http://localhost:8080/api/classes', {
+        const response = await fetch(`${apiUrl}/api/classes`, {
           method: 'GET',
           headers: {
             access: accessToken,
@@ -80,7 +79,7 @@ export const DashboardPage = () => {
     };
 
     fetchClasses();
-  }, [userData.user_id]);
+  }, [userData.user_id, apiUrl]);
 
   return (
     <div className="main-layout">

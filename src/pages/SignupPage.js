@@ -15,9 +15,11 @@ export const SignupPage = () => {
    * @param {string} role - 사용자의 역할 ("선생" 또는 "학생")
    * @param {string} name - 사용자의 실제 이름
    */
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const handleOnSubmit = async (email, password, additionalData) => {
     try {
-      const response = await fetch('http://localhost:8080/join', {
+      const response = await fetch(`${apiUrl}/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,18 +65,15 @@ export const SignupPage = () => {
    */
   const handleOnCheck = async email => {
     try {
-      const response = await fetch(
-        'http://localhost:8080/join/check-username',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: email,
-          }),
+      const response = await fetch(`${apiUrl}/join/check-username`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          username: email,
+        }),
+      });
 
       const data = await response.json();
       if (response.ok) {
