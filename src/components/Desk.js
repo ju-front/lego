@@ -23,7 +23,9 @@ export const Desk = ({
 }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false); // 출석 확인 모달
   const [showAlertModal, setShowAlertModal] = useState(false); // 출석 시간 외 클릭 시 모달
+  const [showOccupiedModal, setShowOccupiedModal] = useState(false); // 이미 출석한 학생이 클릭 시 모달
   const [selectedDesk, setSelectedDesk] = useState(null);
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [attendanceStatus, setAttendanceStatus] = useState(
     Array(row)
       .fill()
@@ -69,6 +71,10 @@ export const Desk = ({
     setShowAlertModal(false);
   }
 
+  function handleCloseOccupiedModal() {
+    setShowOccupiedModal(false);
+  }
+
   async function handleConfirmAttendance() {
     const existingRecord = attendanceRecords.find(
       record => record.studentId === currentUser.userId,
@@ -77,7 +83,7 @@ export const Desk = ({
     if (existingRecord) {
       // 이미 출석한 학생이 다른 자리에 출석하려고 하는 경우
       const response = await fetch(
-        `http://localhost:8080/api/classes/${classId}/attendance/student`,
+        `${apiUrl}/api/classes/${classId}/attendance/student`,
         {
           method: 'PUT',
           headers: {
@@ -93,14 +99,19 @@ export const Desk = ({
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.log(errorData.message);
+        const error = await response.json();
+        if (error.message === 'Desk is already occupied') {
+          setShowOccupiedModal(true);
+          handleCloseModal();
+        } else {
+          console.log(error.message);
+        }
         return;
       }
     } else {
       // 새로운 출석 정보 생성
       const response = await fetch(
-        `http://localhost:8080/api/classes/${classId}/attendance/student`,
+        `${apiUrl}/api/classes/${classId}/attendance/student`,
         {
           method: 'POST',
           headers: {
@@ -119,7 +130,13 @@ export const Desk = ({
       );
 
       if (!response.ok) {
-        console.log('Failed to send attendance');
+        const error = await response.json();
+        if (error.message === 'Desk is already occupied') {
+          setShowOccupiedModal(true);
+          handleCloseModal();
+        } else {
+          console.log(error.message);
+        }
         return;
       }
     }
@@ -189,6 +206,17 @@ export const Desk = ({
             label="확인"
             onClick={handleCloseAlertModal}
             color="#007bff"
+          />
+        </div>
+      </Modal>
+      <Modal isOpen={showOccupiedModal} onClose={handleCloseOccupiedModal}>
+        <p>해당 자리에는 출석을 할 수 없습니다.</p>
+        <div className="modal-buttons">
+          <Button
+            className="status-modal-button"
+            label="확인"
+            onClick={handleCloseOccupiedModal}
+            color="#ff6347"
           />
         </div>
       </Modal>
