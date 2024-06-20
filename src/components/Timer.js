@@ -15,6 +15,7 @@ export const Timer = ({
   isAttendanceStarted,
 }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // 타이머 실행 시 호출할 함수
   useEffect(() => {
@@ -28,7 +29,7 @@ export const Timer = ({
       }
 
       const response = await fetch(
-        `http://localhost:8080/api/classes/${classId}/attendance/timer`,
+        `${apiUrl}/api/classes/${classId}/attendance/timer`,
         {
           method: 'GET',
           headers: {
@@ -52,7 +53,7 @@ export const Timer = ({
     }
 
     return () => clearInterval(timerId);
-  }, [classId, isAttendanceStarted]);
+  }, [classId, isAttendanceStarted, apiUrl]);
 
   // 타이머 종료 시 호출할 함수
   useEffect(() => {

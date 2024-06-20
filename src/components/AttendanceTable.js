@@ -17,6 +17,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
   const [attendance, setAttendance] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState({});
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchAttendance = useCallback(async () => {
     try {
@@ -26,7 +27,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
       }
 
       const response = await fetch(
-        `http://localhost:8080/api/classes/${classId}/attendance`,
+        `${apiUrl}/api/classes/${classId}/attendance`,
         {
           method: 'GET',
           headers: {
@@ -52,7 +53,7 @@ export const AttendanceTable = ({ classId, role, userId }) => {
     } catch (error) {
       console.error('Failed to load attendance data', error);
     }
-  }, [classId, role, userId]);
+  }, [classId, role, userId, apiUrl]);
 
   useEffect(() => {
     fetchAttendance();
@@ -70,7 +71,6 @@ export const AttendanceTable = ({ classId, role, userId }) => {
 
   const saveStatus = async newStatus => {
     console.log('#####', selectedRecord.attendanceId, newStatus);
-    const apiUrl = `http://localhost:8080/api/classes/${classId}/attendance`;
     const options = {
       method: 'PUT',
       headers: {
@@ -84,7 +84,10 @@ export const AttendanceTable = ({ classId, role, userId }) => {
     };
 
     try {
-      const response = await fetch(apiUrl, options);
+      const response = await fetch(
+        `${apiUrl}/api/classes/${classId}/attendance`,
+        options,
+      );
       const data = await response.json();
 
       if (response.ok) {

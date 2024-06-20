@@ -15,6 +15,7 @@ export const SheetPage = () => {
   const { class_id } = useParams();
   const [userData, setUserData] = useState({});
   const [classData, setClassData] = useState(null); // 수업 정보를 받아올 상태
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const links = [
     { path: '/dashboard', label: '대시보드' },
@@ -31,7 +32,7 @@ export const SheetPage = () => {
           throw new Error('Access token not found');
         }
 
-        const response = await fetch('http://localhost:8080/api/user', {
+        const response = await fetch(`${apiUrl}/api/user`, {
           method: 'GET',
           headers: {
             access: accessToken,
@@ -50,7 +51,7 @@ export const SheetPage = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [apiUrl]);
 
   // 수업 정보 로드
   useEffect(() => {
@@ -61,15 +62,12 @@ export const SheetPage = () => {
           throw new Error('Access token not found');
         }
 
-        const response = await fetch(
-          `http://localhost:8080/api/classes/${class_id}`,
-          {
-            method: 'GET',
-            headers: {
-              access: accessToken,
-            },
+        const response = await fetch(`${apiUrl}/api/classes/${class_id}`, {
+          method: 'GET',
+          headers: {
+            access: accessToken,
           },
-        );
+        });
 
         if (!response.ok) {
           throw new Error('Failed to fetch class data');
@@ -83,7 +81,7 @@ export const SheetPage = () => {
     };
 
     fetchClassData();
-  }, [class_id]);
+  }, [class_id, apiUrl]);
 
   if (!userData || !classData) {
     return <div>Loading...</div>;
