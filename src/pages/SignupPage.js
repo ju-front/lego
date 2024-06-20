@@ -1,5 +1,7 @@
-import { SignupEmail1 } from 'ezy-ui';
-import 'ezy-ui/dist/sign/SignEmail1.css';
+import { Signup2 } from 'ezy-ui';
+// import 'ezy-ui//SignEmail1.css';
+import 'ezy-ui/src/lib/sign/SignEmail1.css';
+
 import '../css/SignPage.css';
 
 import { useNavigate } from 'react-router-dom';
@@ -135,7 +137,7 @@ export const SignupPage = () => {
   return (
     <div className="page-container">
       <div className="custom-signin">
-        <SignupEmail1
+        <Signup2
           onConfirm={handleOnSubmit}
           onCheckDuplicate={handleOnCheck}
           additionalFields={additionalFields}

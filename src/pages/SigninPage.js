@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { SigninEmail1 } from 'ezy-ui';
-import 'ezy-ui/dist/sign/SignEmail1.css';
+// import 'ezy-ui/dist/sign/SignEmail1.css';
+import 'ezy-ui/src/lib/sign/SignEmail1.css';
+
 import '../css/SignPage.css';
 
 import { useNavigate } from 'react-router-dom';
